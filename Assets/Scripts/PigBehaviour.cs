@@ -15,7 +15,9 @@ public class PigBehaviour : MonoBehaviour {
 	public float runSpeed;
 	
 	public FeetCollider feetCollider;
-	
+
+	public LadderCollider ladderCollider;
+
 	public AudioClip deathSound;
 	public AudioClip hitSound;
 
@@ -82,6 +84,22 @@ public class PigBehaviour : MonoBehaviour {
 				}
 				
 			}
+			if (ladderCollider.OnLadder()){
+				if (Input.GetAxis("Vertical") < 0f) {
+					rigidbody.velocity = new Vector3(0f, -runSpeed , 0f);
+					animation.Play("StandAnimation", PlayMode.StopAll);
+					//animation.Play("RunAnimation", PlayMode.StopAll);
+					faceAway(facingRight);
+					
+				} else if (Input.GetAxis("Vertical") > 0f) {
+					rigidbody.velocity = new Vector3(0f, runSpeed,  0f);
+					animation.Play("StandAnimation", PlayMode.StopAll);
+					//animation.Play("RunAnimation", PlayMode.StopAll);
+					faceAway(facingRight);
+					
+				}
+
+			}
 		} else {
 			if (Input.GetButtonDown("Jump") && stationTimer <= 0f) {
 				currentStation.useStation(false, this);
@@ -117,6 +135,31 @@ public class PigBehaviour : MonoBehaviour {
 			transform.rotation = Quaternion.Euler(new Vector3(0f, 90f, 0f));
 		} else {
 			transform.rotation = Quaternion.Euler(new Vector3(0f, 270f, 0f));
+		}
+	}
+
+	private void faceAway(bool faceRight) {
+		StopAllCoroutines();
+		StartCoroutine(RotateCoroutine(faceRight));
+	}
+	
+	private IEnumerator faceAwayeCoroutine(bool faceRight) {
+		facingRight = faceRight;
+		
+		for (float t = 0; t <= rotateTime; t += Time.deltaTime) {
+			if (faceRight) {			
+				transform.rotation = Quaternion.Slerp(Quaternion.Euler(new Vector3(0f, 270f, 0f)), Quaternion.Euler(new Vector3(0f, 0f, 0f)), t / rotateTime);
+			} else {
+				transform.rotation = Quaternion.Slerp(Quaternion.Euler(new Vector3(0f, 90f, 0f)), Quaternion.Euler(new Vector3(0f, 180f, 0f)), t / rotateTime);
+			}
+			
+			yield return null;
+		}
+		
+		if (faceRight) {			
+			transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, 0f));
+		} else {
+			transform.rotation = Quaternion.Euler(new Vector3(0f, 180f, 0f));
 		}
 	}
 
