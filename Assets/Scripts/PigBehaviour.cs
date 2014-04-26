@@ -84,18 +84,22 @@ public class PigBehaviour : MonoBehaviour {
 				}
 				
 			}
+			//climb ladder
 			if (ladderCollider.OnLadder()){
+				faceAway(facingRight);
 				if (Input.GetAxis("Vertical") < 0f) {
+					faceAway(facingRight);
 					rigidbody.velocity = new Vector3(0f, -runSpeed , 0f);
 					animation.Play("StandAnimation", PlayMode.StopAll);
 					//animation.Play("RunAnimation", PlayMode.StopAll);
-					faceAway(facingRight);
+
 					
 				} else if (Input.GetAxis("Vertical") > 0f) {
+					faceAway(facingRight);
 					rigidbody.velocity = new Vector3(0f, runSpeed,  0f);
 					animation.Play("StandAnimation", PlayMode.StopAll);
 					//animation.Play("RunAnimation", PlayMode.StopAll);
-					faceAway(facingRight);
+
 					
 				}
 
@@ -140,15 +144,15 @@ public class PigBehaviour : MonoBehaviour {
 
 	private void faceAway(bool faceRight) {
 		StopAllCoroutines();
-		StartCoroutine(RotateCoroutine(faceRight));
+		StartCoroutine(faceAwayeCoroutine(faceRight));
 	}
 	
 	private IEnumerator faceAwayeCoroutine(bool faceRight) {
-		facingRight = faceRight;
+		//facingRight = faceRight;
 		
 		for (float t = 0; t <= rotateTime; t += Time.deltaTime) {
 			if (faceRight) {			
-				transform.rotation = Quaternion.Slerp(Quaternion.Euler(new Vector3(0f, 270f, 0f)), Quaternion.Euler(new Vector3(0f, 0f, 0f)), t / rotateTime);
+				transform.rotation = Quaternion.Slerp(Quaternion.Euler(new Vector3(0f, 270f, 0f)), Quaternion.Euler(new Vector3(0f, 180f, 0f)), t / rotateTime);
 			} else {
 				transform.rotation = Quaternion.Slerp(Quaternion.Euler(new Vector3(0f, 90f, 0f)), Quaternion.Euler(new Vector3(0f, 180f, 0f)), t / rotateTime);
 			}
@@ -159,7 +163,7 @@ public class PigBehaviour : MonoBehaviour {
 		if (faceRight) {			
 			transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, 0f));
 		} else {
-			transform.rotation = Quaternion.Euler(new Vector3(0f, 180f, 0f));
+			transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, 0f));
 		}
 	}
 
