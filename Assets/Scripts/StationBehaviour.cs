@@ -7,6 +7,7 @@ public class StationBehaviour : MonoBehaviour {
 	public MovementStationBehaviour movementStation;
 	public GrappleStationBehaviour grappleStation;
 	public PumpStationBehavior pumpStation;
+	public RocketStationBehaviour rocketStation;
 
 	private Station station;
 
@@ -36,10 +37,18 @@ public class StationBehaviour : MonoBehaviour {
 			if (grappleStation != null) {
 				Debug.LogError("Ignoring GrappleStation: " + grappleStation);
 			}
+			if (pumpStation != null) {
+				Debug.LogError("Ignoring PumpStation: " + pumpStation);
+			}
 		} else if (grappleStation != null) {
 			station = grappleStation;
+			if (pumpStation != null) {
+				Debug.LogError("Ignoring PumpStation: " + pumpStation);
+			}
 		} else if (pumpStation != null) {
 			station = pumpStation;
+		} else if (rocketStation != null) {
+			station = rocketStation;
 		} else {
 			Debug.LogError(this + ": No station to use!" + movementStation + grappleStation);
 		}
