@@ -4,6 +4,8 @@ using System.Collections;
 [RequireComponent (typeof (Transform))]
 public class MovementStationBehaviour : MonoBehaviour, Station {
 
+	public CameraBehaviour subCamera;
+
 	public float movementAccel = 3f;
 	public float maxSpeed = 5f;
 
@@ -32,10 +34,12 @@ public class MovementStationBehaviour : MonoBehaviour, Station {
 			rigidbody.isKinematic = false;
 			engaged = true;
 			other.useStation(this);
+			subCamera.zoomCamera(true);
 		} else {
 			rigidbody.isKinematic = true;
 			engaged = false;
 			other.useStation(null);
+			subCamera.zoomCamera(false);
 		}
 	}
 }

@@ -9,6 +9,8 @@ public class GrappleStationBehaviour : MonoBehaviour, Station {
 
 	public LootCounterBehaviour lootCounter;
 
+	public CameraBehaviour subCamera;
+
 	public Texture2D crosshairTex;
 	public Color crosshairColor;
 	public int texSize = 64;
@@ -93,9 +95,11 @@ public class GrappleStationBehaviour : MonoBehaviour, Station {
 		if (engage) {
 			engaged = true;
 			other.useStation(this);
+			subCamera.zoomCamera(true);
 		} else {
 			engaged = false;
 			other.useStation(null);
+			subCamera.zoomCamera(false);
 		}
 	}
 
