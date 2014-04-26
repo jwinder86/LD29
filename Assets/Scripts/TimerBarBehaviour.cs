@@ -29,7 +29,7 @@ public class TimerBarBehaviour : MonoBehaviour {
 	}
 	
 	public void setStatus(float fraction, float value) {
-		Debug.Log("fraction:value:" + fraction + " : " + value);
+		//Debug.Log("fraction:value:" + fraction + " : " + value);
 		bar.transform.localScale = new Vector3(initialScale.x, initialScale.y * fraction, initialScale.z);
 		bar.transform.localPosition = new Vector3(initialPosition.x, initialPosition.y + (fraction - 1f) * initialScale.y / 2f, initialPosition.z);
 		bar.renderer.material.color = Color.Lerp(emptyColor, fullColor, fraction);

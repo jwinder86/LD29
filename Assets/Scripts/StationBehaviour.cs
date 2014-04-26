@@ -6,6 +6,7 @@ public class StationBehaviour : MonoBehaviour {
 
 	public MovementStationBehaviour movementStation;
 	public GrappleStationBehaviour grappleStation;
+	public PumpStationBehavior pumpStation;
 
 	private Station station;
 
@@ -37,6 +38,8 @@ public class StationBehaviour : MonoBehaviour {
 			}
 		} else if (grappleStation != null) {
 			station = grappleStation;
+		} else if (pumpStation != null) {
+			station = pumpStation;
 		} else {
 			Debug.LogError(this + ": No station to use!" + movementStation + grappleStation);
 		}

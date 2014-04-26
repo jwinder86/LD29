@@ -5,13 +5,14 @@ public class WaterClock : MonoBehaviour {
 
 	private static float[] tickTimes = {5f, 4f, 3f, 2.5f, 2f, 1.5f, 1f, 0.75f, 0.5f, 0.25f, -100f};
 	
-	public float waterMax = 10f;
+	public float waterMax = 45f;
 	public TimerBarBehaviour display;
 	
 	private float waterLevel;
 	
 	private PigBehaviour pig;
 	private bool gameRunning;
+	private bool pumpingWater;
 	
 	public string[] levelList;
 	
@@ -27,7 +28,7 @@ public class WaterClock : MonoBehaviour {
 	void Start () {
 		waterLevel = 0;
 		gameRunning = true;
-		
+		pumpingWater = false;
 		pig = (PigBehaviour) FindObjectOfType(typeof(PigBehaviour));
 		
 		tickIndex = 0;
@@ -38,12 +39,21 @@ public class WaterClock : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		Debug.Log("gamerunning: " + gameRunning + "| waterLevel: " + waterLevel + "waterMax" + waterMax);
-		if (gameRunning) {
-			if(waterLevel >= 0f){
-				waterLevel = waterLevel + Time.deltaTime;
+//		if(Input.GetKeyDown ("f")){
+//			Debug.Log("pumping water");
+//			pumpingWater = true;
+//		}
 
-				
+		//Debug.Log("gamerunning: " + gameRunning + "| waterLevel: " + waterLevel + "waterMax" + waterMax);
+		if (gameRunning) {
+			if(pumpingWater && waterLevel >= 0f){
+				waterLevel = waterLevel - 4*Time.deltaTime;
+				if(waterLevel <0f){
+					waterLevel = 0f;
+				}
+			}else if(waterLevel >= 0f){
+				waterLevel = waterLevel + Time.deltaTime;
+							
 			} else {
 				waterLevel = waterMax;
 				//GameOver();
@@ -65,6 +75,7 @@ public class WaterClock : MonoBehaviour {
 			Application.LoadLevel(Application.loadedLevel);
 		}
 		display.setStatus(waterLevel / waterMax, waterLevel);
+
 	}
 	
 	
@@ -77,7 +88,7 @@ public class WaterClock : MonoBehaviour {
 			
 			audio.PlayOneShot(moreTime);
 			
-			Debug.Log ("decreasing water: " + amount + " = " + waterLevel);
+			//Debug.Log ("decreasing water: " + amount + " = " + waterLevel);
 		}
 	}
 	
@@ -105,7 +116,11 @@ public class WaterClock : MonoBehaviour {
 			//StartCoroutine(loadNextLevel());
 		}		
 	}
-	
+
+	public void setPumpingWater(bool isPumping){
+		pumpingWater = isPumping;
+	}
+
 	
 //	private IEnumerator loadNextLevel() {
 //		
