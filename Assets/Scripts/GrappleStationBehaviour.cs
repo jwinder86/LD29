@@ -7,6 +7,12 @@ public class GrappleStationBehaviour : MonoBehaviour, Station {
 
 	public Transform submarine;
 
+	public LootCounterBehaviour lootCounter;
+
+	public Texture2D crosshairTex;
+	public Color crosshairColor;
+	public int texSize = 64;
+
 	public float moveSpeed;
 	public float moveTime;
 
@@ -31,6 +37,19 @@ public class GrappleStationBehaviour : MonoBehaviour, Station {
 				Vector3 fireDirection = relativeMouse(Input.mousePosition).normalized;
 				StartCoroutine(FireCoroutine(fireDirection));
 			}
+		}
+	}
+
+	// draw the crosshairs
+	void OnGUI() {
+		if (engaged) {
+			Rect rect = new Rect(
+				Input.mousePosition.x - texSize / 2,
+				Screen.height - Input.mousePosition.y - texSize / 2,
+				texSize, texSize);
+
+			GUI.color = crosshairColor;
+			GUI.DrawTexture(rect, crosshairTex);
 		}
 	}
 
@@ -63,6 +82,7 @@ public class GrappleStationBehaviour : MonoBehaviour, Station {
 		renderer.enabled = false;
 
 		if (currentLoot != null) {
+			lootCounter.addLoot(currentLoot.getValue());
 			Destroy(currentLoot.gameObject);
 			currentLoot = null;
 		}
