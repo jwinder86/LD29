@@ -17,8 +17,6 @@ public class StationBehaviour : MonoBehaviour {
 	}
 
 	void OnTriggerStay(Collider other) {
-		Debug.Log("Entered");
-
 		PigBehaviour pig = other.GetComponent<PigBehaviour>();
 
 		if (pig != null && Input.GetButtonDown("Jump")) {

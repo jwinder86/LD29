@@ -30,7 +30,7 @@ public class PigBehaviour : MonoBehaviour {
 	
 	private bool facingRight;
 
-	private Station atStation;
+	private Station currentStation;
 	private float stationTimer;
 	
 	// Use this for initialization
@@ -46,7 +46,7 @@ public class PigBehaviour : MonoBehaviour {
 		
 		facingRight = true;
 
-		atStation = null;
+		currentStation = null;
 		stationTimer = 0f;
 	}
 	
@@ -56,7 +56,7 @@ public class PigBehaviour : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (atStation == null) {
+		if (currentStation == null) {
 			rigidbody.WakeUp();
 
 			// move left and right
@@ -84,7 +84,7 @@ public class PigBehaviour : MonoBehaviour {
 			}
 		} else {
 			if (Input.GetButtonDown("Jump") && stationTimer <= 0f) {
-				useStation(null);
+				currentStation.useStation(false, this);
 			}
 
 			if (stationTimer > 0f) {
@@ -122,7 +122,7 @@ public class PigBehaviour : MonoBehaviour {
 
 	public void useStation(Station station) {
 		Debug.Log("Use Station: " + station);
-		if (station == null) {
+		if (station != null) {
 			rigidbody.isKinematic = true;
 			collider.enabled = false;
 			stationTimer = 0.2f; // wait 2 seconds
@@ -131,6 +131,6 @@ public class PigBehaviour : MonoBehaviour {
 			collider.enabled = true;
 		}
 
-		atStation = station;
+		currentStation = station;
 	}
 }

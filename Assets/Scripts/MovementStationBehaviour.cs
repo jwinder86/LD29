@@ -31,12 +31,12 @@ public class MovementStationBehaviour : MonoBehaviour, Station {
 		if (engage) {
 			rigidbody.isKinematic = false;
 			engaged = true;
+			other.useStation(this);
 		} else {
 			rigidbody.isKinematic = true;
 			engaged = false;
+			other.useStation(null);
 		}
-
-		other.useStation(this);
 	}
 
 	public void mouseInputDown(Vector3 mousePos, bool leftButtonDown, bool rightButtonDown) {}
