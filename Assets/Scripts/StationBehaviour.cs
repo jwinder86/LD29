@@ -1,11 +1,28 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public interface Station {
+[RequireComponent (typeof (Collider))]
+public class StationBehaviour : MonoBehaviour {
 
-	void directionalInput(Vector2 moveVector);
+	public MovementStationBehaviour station;
 
-	void mouseInputDown(Vector3 mousePos, bool leftButtonDown, bool rightButtonDown);
+	// Use this for initialization
+	void Start () {
 
-	void mouseInputHeld(Vector3 mousePos, bool leftButtonHeld, bool rightButtonHeld);
+	}
+	
+	// Update is called once per frame
+	void Update () {
+	
+	}
+
+	void OnTriggerStay(Collider other) {
+		Debug.Log("Entered");
+
+		PigBehaviour pig = other.GetComponent<PigBehaviour>();
+
+		if (pig != null && Input.GetButtonDown("Jump")) {
+			station.useStation(true, pig);
+		}
+	}
 }

@@ -29,6 +29,9 @@ public class PigBehaviour : MonoBehaviour {
 	private Animation animation;
 	
 	private bool facingRight;
+
+	private Station atStation;
+	private float stationTimer;
 	
 	// Use this for initialization
 	void Start () {
@@ -42,6 +45,9 @@ public class PigBehaviour : MonoBehaviour {
 
 		
 		facingRight = true;
+
+		atStation = null;
+		stationTimer = 0f;
 	}
 	
 	void LateUpdate() {
@@ -50,30 +56,40 @@ public class PigBehaviour : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		rigidbody.WakeUp();
+		if (atStation == null) {
+			rigidbody.WakeUp();
 
-		// move left and right
-		if (feetCollider.OnGround()) {
-			if (Input.GetAxis("Horizontal") < 0f) {
-				rigidbody.velocity = new Vector3(-runSpeed, rigidbody.velocity.y, 0f);
-				animation.Play("RunAnimation", PlayMode.StopAll);
-				
-				if (facingRight) {
-					Rotate(false);
+			// move left and right
+			if (feetCollider.OnGround()) {
+				if (Input.GetAxis("Horizontal") < 0f) {
+					rigidbody.velocity = new Vector3(-runSpeed, rigidbody.velocity.y, 0f);
+					animation.Play("RunAnimation", PlayMode.StopAll);
+					
+					if (facingRight) {
+						Rotate(false);
+					}
+					
+				} else if (Input.GetAxis("Horizontal") > 0f) {
+					rigidbody.velocity = new Vector3(runSpeed, rigidbody.velocity.y, 0f);
+					animation.Play("RunAnimation", PlayMode.StopAll);
+					
+					if (!facingRight) {
+						Rotate(true);
+					}
+					
+				} else {
+					animation.Play("StandAnimation", PlayMode.StopAll);
 				}
 				
-			} else if (Input.GetAxis("Horizontal") > 0f) {
-				rigidbody.velocity = new Vector3(runSpeed, rigidbody.velocity.y, 0f);
-				animation.Play("RunAnimation", PlayMode.StopAll);
-				
-				if (!facingRight) {
-					Rotate(true);
-				}
-				
-			} else {
-				animation.Play("StandAnimation", PlayMode.StopAll);
 			}
-			
+		} else {
+			if (Input.GetButtonDown("Jump") && stationTimer <= 0f) {
+				useStation(null);
+			}
+
+			if (stationTimer > 0f) {
+				stationTimer -= Time.deltaTime;
+			}
 		}
 	}
 	
@@ -104,13 +120,17 @@ public class PigBehaviour : MonoBehaviour {
 		}
 	}
 
+	public void useStation(Station station) {
+		Debug.Log("Use Station: " + station);
+		if (station == null) {
+			rigidbody.isKinematic = true;
+			collider.enabled = false;
+			stationTimer = 0.2f; // wait 2 seconds
+		} else {
+			rigidbody.isKinematic = false;
+			collider.enabled = true;
+		}
 
-	
-//	private FollowTransform getScreen() {
-//		if (screen == null) {
-//			screen = (FollowTransform) FindObjectOfType(typeof(FollowTransform));
-//		}
-//		
-//		return screen;
-//	}
+		atStation = station;
+	}
 }
