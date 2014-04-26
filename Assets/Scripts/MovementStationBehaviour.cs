@@ -42,4 +42,13 @@ public class MovementStationBehaviour : MonoBehaviour, Station {
 			subCamera.zoomCamera(false);
 		}
 	}
+
+	public void sinkSub(){
+		engaged = false;
+		subCamera.zoomCamera(true);
+		rigidbody.isKinematic = false;
+		rigidbody.useGravity = true;
+//		transform.rigidbody.constraints = RigidbodyConstraints.FreezePositionZ;
+//		rigidbody.AddTorque(Random.rotation.eulerAngles, ForceMode.VelocityChange);
+	}
 }

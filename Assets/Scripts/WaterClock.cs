@@ -7,17 +7,22 @@ public class WaterClock : MonoBehaviour {
 	
 	public float waterMax = 60f;
 	public float pumpRate = 4f;
+
 	public TimerBarBehaviour display;
 	
 	private float waterLevel;
 
 
 	private PigBehaviour pig;
+	private MovementStationBehaviour sub;
+
 	private bool gameRunning;
 	private bool pumpingWater;
 	
 	public string[] levelList;
-	
+
+	private float leakMultiplyer;
+
 	public AudioClip moreTime;
 	public AudioClip tickSound;
 	
@@ -28,11 +33,13 @@ public class WaterClock : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		waterLevel = 0;
+		waterLevel = 0f;
+		leakMultiplyer = 1f;
 		gameRunning = true;
 		pumpingWater = false;
 		pig = (PigBehaviour) FindObjectOfType(typeof(PigBehaviour));
-		
+		sub = (MovementStationBehaviour) FindObjectOfType(typeof(MovementStationBehaviour));
+
 		tickIndex = 0;
 //		fade = this.GetComponent<FadeBehaviour>();
 //		fade.FadeIn();
@@ -48,22 +55,22 @@ public class WaterClock : MonoBehaviour {
 
 		//Debug.Log("gamerunning: " + gameRunning + "| waterLevel: " + waterLevel + "waterMax" + waterMax);
 		if (gameRunning) {
+			// activated pump
 			if(pumpingWater && waterLevel >= 0f){
 				waterLevel = waterLevel - pumpRate*Time.deltaTime;
 				if(waterLevel <0f){
 					waterLevel = 0f;
 				}
+			// water leaking
 			}else if(waterLevel >= 0f){
-				waterLevel = waterLevel + Time.deltaTime;
+				waterLevel = waterLevel + leakMultiplyer*Time.deltaTime;
 							
-			} else {
-				waterLevel = waterMax;
-				//GameOver();
 			}
 			
-			// don't allow the boredom clock to be higher than boredomMax
-			if(waterLevel > waterMax){
+			// don't allow the water clock to be higher than waterMax
+			if(waterLevel >= waterMax){
 				waterLevel = waterMax;
+				GameOver();
 			}
 		} else {
 			if (waterLevel <= 0f) {
@@ -74,36 +81,39 @@ public class WaterClock : MonoBehaviour {
 		//playTick();
 		
 		if(Input.GetKeyDown ("r")){
-			Application.LoadLevel(Application.loadedLevel);
+			StartCoroutine(ReloadLevel());
+		}
+		if(Input.GetKeyDown ("f")){
+			increaseLeakMultiplyer(0.2f);
 		}
 		display.setStatus(waterLevel / waterMax, waterLevel);
 
 	}
 	
 	
-	public void increaseClock(float amount){
-		if (gameRunning) {
-			waterLevel -= amount;
-			//display.setShakeTime(0.5f);
-			
-			//resetTick();
-			
-			audio.PlayOneShot(moreTime);
-			
-			//Debug.Log ("decreasing water: " + amount + " = " + waterLevel);
-		}
-	}
+//	public void increaseClock(float amount){
+//		if (gameRunning) {
+//			waterLevel -= amount;
+//			//display.setShakeTime(0.5f);
+//			
+//			//resetTick();
+//			
+//			audio.PlayOneShot(moreTime);
+//			
+//			//Debug.Log ("decreasing water: " + amount + " = " + waterLevel);
+//		}
+//	}
 	
 	
 	public void GameOver() {
-//		if (gameRunning) {
-//			waterLevel = 0f;
-//			pig.Die();
-//			
-//			StartCoroutine(ReloadLevel());
-//			
-//			gameRunning = false;
-//		}
+		if (gameRunning) {
+			waterLevel = waterMax;
+			pig.Die();
+			sub.sinkSub();
+			StartCoroutine(ReloadLevel());
+			
+			gameRunning = false;
+		}
 	}
 	
 	public bool isGameRunning(){
@@ -142,8 +152,14 @@ public class WaterClock : MonoBehaviour {
 //	}
 	
 	private IEnumerator ReloadLevel() {
-		yield return new WaitForSeconds(5f);
+		yield return new WaitForSeconds(7f);
 		Application.LoadLevel(Application.loadedLevel);
+	}
+
+	public void increaseLeakMultiplyer(float inc){
+		if(inc > 0f){
+			leakMultiplyer = leakMultiplyer + inc;
+		}
 	}
 	
 //	private void playTick() {
