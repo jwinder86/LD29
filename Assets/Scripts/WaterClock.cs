@@ -7,6 +7,7 @@ public class WaterClock : MonoBehaviour {
 	
 	public float waterMax = 60f;
 	public float pumpRate = 4f;
+
 	public TimerBarBehaviour display;
 	
 	private float waterLevel;
@@ -19,7 +20,9 @@ public class WaterClock : MonoBehaviour {
 	private bool pumpingWater;
 	
 	public string[] levelList;
-	
+
+	private float leakMultiplyer;
+
 	public AudioClip moreTime;
 	public AudioClip tickSound;
 	
@@ -30,7 +33,8 @@ public class WaterClock : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		waterLevel = 0;
+		waterLevel = 0f;
+		leakMultiplyer = 1f;
 		gameRunning = true;
 		pumpingWater = false;
 		pig = (PigBehaviour) FindObjectOfType(typeof(PigBehaviour));
@@ -59,7 +63,7 @@ public class WaterClock : MonoBehaviour {
 				}
 			// water leaking
 			}else if(waterLevel >= 0f){
-				waterLevel = waterLevel + Time.deltaTime;
+				waterLevel = waterLevel + leakMultiplyer*Time.deltaTime;
 							
 			}
 			
@@ -79,23 +83,26 @@ public class WaterClock : MonoBehaviour {
 		if(Input.GetKeyDown ("r")){
 			StartCoroutine(ReloadLevel());
 		}
+		if(Input.GetKeyDown ("f")){
+			increaseLeakMultiplyer(0.2f);
+		}
 		display.setStatus(waterLevel / waterMax, waterLevel);
 
 	}
 	
 	
-	public void increaseClock(float amount){
-		if (gameRunning) {
-			waterLevel -= amount;
-			//display.setShakeTime(0.5f);
-			
-			//resetTick();
-			
-			audio.PlayOneShot(moreTime);
-			
-			//Debug.Log ("decreasing water: " + amount + " = " + waterLevel);
-		}
-	}
+//	public void increaseClock(float amount){
+//		if (gameRunning) {
+//			waterLevel -= amount;
+//			//display.setShakeTime(0.5f);
+//			
+//			//resetTick();
+//			
+//			audio.PlayOneShot(moreTime);
+//			
+//			//Debug.Log ("decreasing water: " + amount + " = " + waterLevel);
+//		}
+//	}
 	
 	
 	public void GameOver() {
@@ -147,6 +154,12 @@ public class WaterClock : MonoBehaviour {
 	private IEnumerator ReloadLevel() {
 		yield return new WaitForSeconds(7f);
 		Application.LoadLevel(Application.loadedLevel);
+	}
+
+	public void increaseLeakMultiplyer(float inc){
+		if(inc > 0f){
+			leakMultiplyer = leakMultiplyer + inc;
+		}
 	}
 	
 //	private void playTick() {

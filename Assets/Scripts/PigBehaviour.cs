@@ -238,7 +238,9 @@ public class PigBehaviour : MonoBehaviour {
 			isDead = true;
 			audio.PlayOneShot(deathSound);
 			transform.localRotation = Quaternion.Euler(new Vector3(0f, -180f, 0f));
-			
+
+			useStation(null);
+
 			animation.Play("StandAnimation", PlayMode.StopAll);
 			transform.rigidbody.constraints = RigidbodyConstraints.FreezePositionZ;
 			rigidbody.AddTorque(Random.rotation.eulerAngles, ForceMode.VelocityChange);

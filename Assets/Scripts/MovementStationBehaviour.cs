@@ -44,6 +44,7 @@ public class MovementStationBehaviour : MonoBehaviour, Station {
 	}
 
 	public void sinkSub(){
+		engaged = false;
 		subCamera.zoomCamera(true);
 		rigidbody.isKinematic = false;
 		rigidbody.useGravity = true;
