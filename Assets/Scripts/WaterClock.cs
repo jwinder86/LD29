@@ -5,11 +5,13 @@ public class WaterClock : MonoBehaviour {
 
 	private static float[] tickTimes = {5f, 4f, 3f, 2.5f, 2f, 1.5f, 1f, 0.75f, 0.5f, 0.25f, -100f};
 	
-	public float waterMax = 45f;
+	public float waterMax = 60f;
+	public float pumpRate = 4f;
 	public TimerBarBehaviour display;
 	
 	private float waterLevel;
-	
+
+
 	private PigBehaviour pig;
 	private bool gameRunning;
 	private bool pumpingWater;
@@ -47,7 +49,7 @@ public class WaterClock : MonoBehaviour {
 		//Debug.Log("gamerunning: " + gameRunning + "| waterLevel: " + waterLevel + "waterMax" + waterMax);
 		if (gameRunning) {
 			if(pumpingWater && waterLevel >= 0f){
-				waterLevel = waterLevel - 4*Time.deltaTime;
+				waterLevel = waterLevel - pumpRate*Time.deltaTime;
 				if(waterLevel <0f){
 					waterLevel = 0f;
 				}
