@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[RequireComponent (typeof (Rigidbody))]
+[RequireComponent (typeof (Transform))]
 public class MovementStationBehaviour : MonoBehaviour, Station {
 
 	public float movementAccel = 3f;
