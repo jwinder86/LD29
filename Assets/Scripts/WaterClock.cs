@@ -13,6 +13,8 @@ public class WaterClock : MonoBehaviour {
 
 
 	private PigBehaviour pig;
+	private MovementStationBehaviour sub;
+
 	private bool gameRunning;
 	private bool pumpingWater;
 	
@@ -32,7 +34,8 @@ public class WaterClock : MonoBehaviour {
 		gameRunning = true;
 		pumpingWater = false;
 		pig = (PigBehaviour) FindObjectOfType(typeof(PigBehaviour));
-		
+		sub = (MovementStationBehaviour) FindObjectOfType(typeof(MovementStationBehaviour));
+
 		tickIndex = 0;
 //		fade = this.GetComponent<FadeBehaviour>();
 //		fade.FadeIn();
@@ -48,22 +51,22 @@ public class WaterClock : MonoBehaviour {
 
 		//Debug.Log("gamerunning: " + gameRunning + "| waterLevel: " + waterLevel + "waterMax" + waterMax);
 		if (gameRunning) {
+			// activated pump
 			if(pumpingWater && waterLevel >= 0f){
 				waterLevel = waterLevel - pumpRate*Time.deltaTime;
 				if(waterLevel <0f){
 					waterLevel = 0f;
 				}
+			// water leaking
 			}else if(waterLevel >= 0f){
 				waterLevel = waterLevel + Time.deltaTime;
 							
-			} else {
-				waterLevel = waterMax;
-				//GameOver();
 			}
 			
-			// don't allow the boredom clock to be higher than boredomMax
-			if(waterLevel > waterMax){
+			// don't allow the water clock to be higher than waterMax
+			if(waterLevel >= waterMax){
 				waterLevel = waterMax;
+				GameOver();
 			}
 		} else {
 			if (waterLevel <= 0f) {
@@ -74,7 +77,7 @@ public class WaterClock : MonoBehaviour {
 		//playTick();
 		
 		if(Input.GetKeyDown ("r")){
-			Application.LoadLevel(Application.loadedLevel);
+			StartCoroutine(ReloadLevel());
 		}
 		display.setStatus(waterLevel / waterMax, waterLevel);
 
@@ -96,14 +99,14 @@ public class WaterClock : MonoBehaviour {
 	
 	
 	public void GameOver() {
-//		if (gameRunning) {
-//			waterLevel = 0f;
-//			pig.Die();
-//			
-//			StartCoroutine(ReloadLevel());
-//			
-//			gameRunning = false;
-//		}
+		if (gameRunning) {
+			waterLevel = waterMax;
+			pig.Die();
+			sub.sinkSub();
+			StartCoroutine(ReloadLevel());
+			
+			gameRunning = false;
+		}
 	}
 	
 	public bool isGameRunning(){
@@ -142,7 +145,7 @@ public class WaterClock : MonoBehaviour {
 //	}
 	
 	private IEnumerator ReloadLevel() {
-		yield return new WaitForSeconds(5f);
+		yield return new WaitForSeconds(7f);
 		Application.LoadLevel(Application.loadedLevel);
 	}
 	
