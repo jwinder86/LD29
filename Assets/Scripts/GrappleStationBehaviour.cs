@@ -58,6 +58,7 @@ public class GrappleStationBehaviour : MonoBehaviour, Station {
 		moveTimer = 0f;
 		transform.position = subPosition();
 		renderer.enabled = true;
+		transform.parent = null;
 
 		// move out
 		while (moveTimer < moveTime && currentLoot == null) {
