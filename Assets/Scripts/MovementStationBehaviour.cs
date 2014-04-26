@@ -48,7 +48,8 @@ public class MovementStationBehaviour : MonoBehaviour, Station {
 		subCamera.zoomCamera(true);
 		rigidbody.isKinematic = false;
 		rigidbody.useGravity = true;
-//		transform.rigidbody.constraints = RigidbodyConstraints.FreezePositionZ;
-//		rigidbody.AddTorque(Random.rotation.eulerAngles, ForceMode.VelocityChange);
+		rigidbody.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationX;
+		rigidbody.AddTorque(new Vector3(0f, 0f, Random.Range(-1, 1)) * 100f, ForceMode.Acceleration);
+		subCamera.transform.parent = null;
 	}
 }
