@@ -17,7 +17,11 @@ public class CameraBehaviour : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	
+		RenderSettings.fog = true;
+		RenderSettings.fogDensity = 0.005f;
+		RenderSettings.fogStartDistance = 80f;
+		RenderSettings.fogEndDistance = 300f;
+		RenderSettings.fogMode = FogMode.Linear;
 	}
 	
 	// Update is called once per frame

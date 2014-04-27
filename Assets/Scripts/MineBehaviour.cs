@@ -5,6 +5,7 @@ using System.Collections;
 public class MineBehaviour : MonoBehaviour {
 
 	public ExplosionBehaviour explosionPrefab;
+	public LootBehaviour lootPrefab;
 
 	// Use this for initialization
 	void Start () {
@@ -23,7 +24,7 @@ public class MineBehaviour : MonoBehaviour {
 		}
 
 		ExplosionBehaviour explosion = (ExplosionBehaviour) Instantiate(explosionPrefab, transform.position, Quaternion.identity);
-		explosion.Explode();
+		explosion.ExplodeAndInstantiate(lootPrefab.gameObject);
 		Destroy(gameObject);
 	}
 }
