@@ -14,6 +14,7 @@ public class PigBehaviour : MonoBehaviour {
 
 	public FeetCollider feetCollider;
 
+	public Rigidbody submarineBody;
 	public LadderCollider ladderCollider;
 	public Collider ladderFloorPanel;
 
@@ -66,13 +67,16 @@ public class PigBehaviour : MonoBehaviour {
 			if (currentStation == null) {
 				rigidbody.WakeUp();
 
+				Vector3 startVel = rigidbody.velocity;
+
 				// default to floor enabled
 				ladderFloorPanel.enabled = true;
 
 				// move left and right
 				if (feetCollider.OnGround() || ladderCollider.OnLadder()) {
 					if (Input.GetAxisRaw("Horizontal") < 0f) {
-						rigidbody.velocity = new Vector3(-runSpeed, rigidbody.velocity.y, 0f);
+						fixKinematic();
+						rigidbody.velocity = new Vector3(submarineBody.velocity.x - runSpeed, rigidbody.velocity.y, 0f);
 						animation.Play("RunAnimation", PlayMode.StopAll);
 						
 						if (facingDirection != Facing.Left) {
@@ -80,7 +84,8 @@ public class PigBehaviour : MonoBehaviour {
 						}
 						
 					} else if (Input.GetAxisRaw("Horizontal") > 0f) {
-						rigidbody.velocity = new Vector3(runSpeed, rigidbody.velocity.y, 0f);
+						fixKinematic();
+						rigidbody.velocity = new Vector3(submarineBody.velocity.x + runSpeed, rigidbody.velocity.y, 0f);
 						animation.Play("RunAnimation", PlayMode.StopAll);
 						
 						if (facingDirection != Facing.Right) {
@@ -95,7 +100,8 @@ public class PigBehaviour : MonoBehaviour {
 				//climb ladder
 				if (ladderCollider.OnLadder()){
 					if (Input.GetAxisRaw("Vertical") < 0f) {
-						rigidbody.velocity = new Vector3(0f, -runSpeed , 0f);
+						fixKinematic();
+						rigidbody.velocity = new Vector3(submarineBody.velocity.x, rigidbody.velocity.y - runSpeed , 0f);
 						ladderFloorPanel.enabled = false;
 						animation.Play("StandAnimation", PlayMode.StopAll);
 
@@ -104,16 +110,19 @@ public class PigBehaviour : MonoBehaviour {
 						}
 						
 					} else if (Input.GetAxisRaw("Vertical") > 0f) {
-						rigidbody.velocity = new Vector3(0f, runSpeed,  0f);
+						fixKinematic();
+						rigidbody.velocity = new Vector3(submarineBody.velocity.x, rigidbody.velocity.y + runSpeed,  0f);
 						ladderFloorPanel.enabled = false;
 						animation.Play("StandAnimation", PlayMode.StopAll);
 
 						if (facingDirection != Facing.Back) {
 							Rotate(Facing.Back);
 						}
-						
 					}
 				}
+
+				Debug.Log("Pig Start: " + startVel + ",  End: " + rigidbody.velocity + ",  Sub: " + submarineBody.velocity);
+
 			} else {
 				if (Input.GetButtonDown("Jump") && stationTimer <= 0f) {
 					currentStation.useStation(false, this);
@@ -125,6 +134,8 @@ public class PigBehaviour : MonoBehaviour {
 			}
 		
 		}
+
+		//Debug.Log("Sub: " + submarineBody.velocity + ",  Pig: " + rigidbody.velocity);
 	}
 	
 
@@ -174,7 +185,6 @@ public class PigBehaviour : MonoBehaviour {
 			collider.enabled = false;
 			stationTimer = 0.2f; // wait 2 seconds
 		} else {
-			rigidbody.isKinematic = false;
 			collider.enabled = true;
 		}
 
@@ -196,6 +206,14 @@ public class PigBehaviour : MonoBehaviour {
 			waterClock.GameOver();
 			
 			//getScreen().HeavyShakeTime(0.3f);
+		}
+	}
+
+	private void fixKinematic() {
+		if (rigidbody.isKinematic) {
+			rigidbody.isKinematic = false;
+			rigidbody.WakeUp();
+			rigidbody.velocity = submarineBody.velocity;
 		}
 	}
 

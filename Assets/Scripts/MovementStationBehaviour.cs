@@ -43,13 +43,13 @@ public class MovementStationBehaviour : MonoBehaviour, Station {
 
 		if (engage) {
 			Common.playSound(this.audio, activateStationSound);
-			rigidbody.isKinematic = false;
+			//rigidbody.isKinematic = false;
 			engaged = true;
 			other.useStation(this);
 			subCamera.zoomCamera(true);
 			particles.Play();
 		} else {
-			rigidbody.isKinematic = true;
+			//rigidbody.isKinematic = true;
 			engaged = false;
 			other.useStation(null);
 			subCamera.zoomCamera(false);
@@ -62,7 +62,7 @@ public class MovementStationBehaviour : MonoBehaviour, Station {
 	public void sinkSub(){
 		engaged = false;
 		subCamera.zoomCamera(true);
-		rigidbody.isKinematic = false;
+		//rigidbody.isKinematic = false;
 		rigidbody.useGravity = true;
 		rigidbody.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationX;
 		rigidbody.AddTorque(new Vector3(0f, 0f, Random.Range(-1, 1)) * 100f, ForceMode.Acceleration);
