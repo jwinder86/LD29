@@ -8,7 +8,7 @@ public class WaterClock : MonoBehaviour {
 	
 	public float waterMax = 60f;
 	public float pumpRate = 4f;
-
+	public float damageInc = 0.2f;
 
 	public TimerBarBehaviour display;
 	
@@ -23,7 +23,7 @@ public class WaterClock : MonoBehaviour {
 	
 	public string[] levelList;
 
-	private float leakMultiplyer;
+	public float leakMultiplyer;
 
 	public AudioClip pumpSound;
 
@@ -39,7 +39,7 @@ public class WaterClock : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		waterLevel = 0f;
-		leakMultiplyer = 1f;
+		leakMultiplyer = 0f;
 		gameRunning = true;
 		pumpingWater = false;
 		pig = (PigBehaviour) FindObjectOfType(typeof(PigBehaviour));
@@ -71,11 +71,9 @@ public class WaterClock : MonoBehaviour {
 				if(waterLevel <0f){
 					waterLevel = 0f;
 				}
-			}else{
-				//audio.Stop();
 			}
 			// water leaking
-			if(waterLevel >= 0f){
+			else if(waterLevel >= 0f && leakMultiplyer > 0f){
 				waterLevel = waterLevel + leakMultiplyer*Time.deltaTime;
 				//audio.Stop();
 
@@ -99,7 +97,7 @@ public class WaterClock : MonoBehaviour {
 			StartCoroutine(ReloadLevel());
 		}
 		if(Input.GetKeyDown ("f")){
-			increaseLeakMultiplyer(0.2f);
+			takeDamage();
 		}
 		display.setStatus(waterLevel / waterMax, waterLevel);
 
@@ -174,10 +172,9 @@ public class WaterClock : MonoBehaviour {
 		Application.LoadLevel(Application.loadedLevel);
 	}
 
-	public void increaseLeakMultiplyer(float inc){
-		if(inc > 0f){
-			leakMultiplyer = leakMultiplyer + inc;
-		}
+	public void takeDamage(){
+		Debug.Log("Taking Damage!");
+		leakMultiplyer = leakMultiplyer + damageInc;
 	}
 
 	public float getLeakMultiplyer(){
