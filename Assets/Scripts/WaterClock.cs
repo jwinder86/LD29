@@ -26,8 +26,7 @@ public class WaterClock : MonoBehaviour {
 	private float leakMultiplyer;
 
 	public AudioClip pumpSound;
-	public AudioClip warning1Sound;
-	public AudioClip warning2Sound;
+
 	//public AudioClip moreTime;
 	//public AudioClip tickSound;
 	
@@ -61,41 +60,40 @@ public class WaterClock : MonoBehaviour {
 		//Debug.Log("gamerunning: " + gameRunning + "| waterLevel: " + waterLevel + "waterMax" + waterMax);
 		if (gameRunning) {
 			// activated pump
-
 			if(pumpingWater && waterLevel >= 0f){
-				waterLevel = waterLevel - pumpRate*Time.deltaTime;
-				if(!audio.isPlaying){
-					audio.PlayOneShot(pumpSound);
+				if(leakMultiplyer > pumpRate){
+					// pump catches on fire
+				}else{ // pump still working
+					waterLevel = waterLevel - pumpRate*Time.deltaTime;
+					if(!audio.isPlaying){
+						audio.PlayOneShot(pumpSound);
+					}
 				}
 				if(waterLevel <0f){
 					waterLevel = 0f;
 				}
+			}
 			// water leaking
-			}else if(waterLevel >= 0f){
+			if(waterLevel >= 0f){
 				waterLevel = waterLevel + leakMultiplyer*Time.deltaTime;
 				audio.Stop();
-//				if (waterLevel/waterMax > 0.5f && waterLevel/waterMax  < 0.75f && !audio.isPlaying){
-//					audio.PlayOneShot(warning1Sound);
-//				}else if(waterLevel/waterMax > 0.75f && !audio.isPlaying){
-//					audio.PlayOneShot(warning2Sound);
-//				}
+
 			}
-
-
-
 			// don't allow the water clock to be higher than waterMax
 			if(waterLevel >= waterMax){
 				waterLevel = waterMax;
 				GameOver();
 			}
-		} else {
-			if (waterLevel <= 0f) {
-
-			}
-		}
+		} 
+//		else {
+//			if (waterLevel <= 0f) {
+//
+//			}
+//		}
 		
 		//playTick();
-		
+
+
 		if(Input.GetKeyDown ("r")){
 			StartCoroutine(ReloadLevel());
 		}
@@ -149,6 +147,9 @@ public class WaterClock : MonoBehaviour {
 		pumpingWater = isPumping;
 	}
 
+	public bool isPumping(){
+		return pumpingWater;
+	}
 	
 //	private IEnumerator loadNextLevel() {
 //		
@@ -177,7 +178,21 @@ public class WaterClock : MonoBehaviour {
 			leakMultiplyer = leakMultiplyer + inc;
 		}
 	}
-	
+
+	public float getLeakMultiplyer(){
+		return leakMultiplyer;
+	}
+
+	public float getWaterMax(){
+		return waterMax;
+	}
+	public float getPumpRate(){
+		return pumpRate;
+	}
+	public float getWaterLevel(){
+		return waterLevel;
+	}
+
 //	private void playTick() {
 //		if (waterLevel < tickTimes[tickIndex]) {
 //			audio.PlayOneShot(tickSound);
