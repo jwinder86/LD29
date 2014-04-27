@@ -123,8 +123,9 @@ public class GrappleStationBehaviour : MonoBehaviour, Station {
 	}
 
 	public void useStation(bool engage, PigBehaviour other) {
-		audio.PlayOneShot(activateStationSound);
+
 		if (engage) {
+			Common.playSound(this.audio, activateStationSound);
 			engaged = true;
 			other.useStation(this);
 			subCamera.zoomCamera(true);
@@ -132,6 +133,7 @@ public class GrappleStationBehaviour : MonoBehaviour, Station {
 			engaged = false;
 			other.useStation(null);
 			subCamera.zoomCamera(false);
+			audio.PlayOneShot(activateStationSound);
 		}
 	}
 

@@ -40,8 +40,9 @@ public class MovementStationBehaviour : MonoBehaviour, Station {
 	}
 
 	public void useStation(bool engage, PigBehaviour other) {
-		audio.PlayOneShot(activateStationSound);
+
 		if (engage) {
+			Common.playSound(this.audio, activateStationSound);
 			rigidbody.isKinematic = false;
 			engaged = true;
 			other.useStation(this);
@@ -53,7 +54,9 @@ public class MovementStationBehaviour : MonoBehaviour, Station {
 			other.useStation(null);
 			subCamera.zoomCamera(false);
 			particles.Stop();
+			audio.PlayOneShot(activateStationSound);
 		}
+
 	}
 
 	public void sinkSub(){

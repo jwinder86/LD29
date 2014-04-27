@@ -61,8 +61,9 @@ public class RocketStationBehaviour : MonoBehaviour, Station {
 	}
 
 	public void useStation(bool engage, PigBehaviour other) {
-		Common.playSound(this.audio, activateStationSound);
+
 		if (engage) {
+			Common.playSound(this.audio, activateStationSound);
 			rigidbody.isKinematic = false;
 			engaged = true;
 			other.useStation(this);
@@ -72,6 +73,7 @@ public class RocketStationBehaviour : MonoBehaviour, Station {
 			engaged = false;
 			other.useStation(null);
 			subCamera.zoomCamera(false);
+			audio.PlayOneShot(activateStationSound);
 		}
 	}
 
