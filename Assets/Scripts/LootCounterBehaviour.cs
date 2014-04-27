@@ -6,9 +6,9 @@ public class LootCounterBehaviour : MonoBehaviour {
 	public TextMesh text;
 
 	public WaterClock waterClock;
-	private float damage;
-	private float pumpRate;
+
 	private int score;
+	private int hullPercent;
 
 	// Use this for initialization
 	void Start () {
@@ -27,8 +27,7 @@ public class LootCounterBehaviour : MonoBehaviour {
 	}
 
 	private string getLootString() {
-		damage=waterClock.getLeakMultiplyer();
-		pumpRate=waterClock.getPumpRate();
-		return "Damage:" + damage + " / " + pumpRate + "  -  $ " + score.ToString("#,##0");
+		hullPercent = (int)waterClock.getHullHealth();
+		return "Hull: " + hullPercent + "%     $ " + score.ToString("#,##0");
 	}
 }

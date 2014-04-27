@@ -20,7 +20,7 @@ public class WaterClock : MonoBehaviour {
 
 	private bool gameRunning;
 	private bool pumpingWater;
-	
+	private bool pumpBroke;
 	public string[] levelList;
 
 	public float leakMultiplyer;
@@ -44,7 +44,7 @@ public class WaterClock : MonoBehaviour {
 		pumpingWater = false;
 		pig = (PigBehaviour) FindObjectOfType(typeof(PigBehaviour));
 		sub = (MovementStationBehaviour) FindObjectOfType(typeof(MovementStationBehaviour));
-
+		pumpBroke=false;
 		tickIndex = 0;
 //		fade = this.GetComponent<FadeBehaviour>();
 //		fade.FadeIn();
@@ -61,16 +61,17 @@ public class WaterClock : MonoBehaviour {
 		//Debug.Log("gamerunning: " + gameRunning + "| waterLevel: " + waterLevel + "waterMax" + waterMax);
 		if (gameRunning) {
 			// activated pump
-			if(pumpingWater && waterLevel >= 0f){
-				if(leakMultiplyer > pumpRate){
-					// pump catches on fire
-				}else{ // pump still working
+			if(pumpingWater && waterLevel > 0f && leakMultiplyer < (pumpRate/2)){
+				 // pump still working
 					waterLevel = waterLevel - pumpRate*Time.deltaTime;
 					audio.PlayOneShot(pumpSound);
-				}
+
 				if(waterLevel <0f){
 					waterLevel = 0f;
 				}
+			}else if(leakMultiplyer >= (pumpRate/2) && !pumpBroke){
+				leakMultiplyer += 8f;
+				pumpBroke=true;
 			}
 			// water leaking
 			else if(waterLevel >= 0f && leakMultiplyer > 0f){
@@ -208,4 +209,15 @@ public class WaterClock : MonoBehaviour {
 //		
 //		Debug.Log("New Tick Time" + tickIndex);
 //	}
+
+	public float getHullHealth(){
+		float damage= getLeakMultiplyer();
+		float pumpRate= getPumpRate()/2;
+		float diff = pumpRate - damage;
+		float hullPercent = (diff / pumpRate) * 100f;
+		if (hullPercent < 0f){
+			hullPercent = 0f;
+		}
+		return hullPercent;
+	}
 }
