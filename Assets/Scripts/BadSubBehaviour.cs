@@ -116,8 +116,6 @@ public class BadSubBehaviour : MonoBehaviour {
 	}
 
 	private IEnumerator ChangeDirection() {
-		yield return new WaitForSeconds(Random.value * moveTime);
-		
 		while (true) {
 			moveRight = !moveRight;
 			

@@ -23,6 +23,11 @@ public class MineBehaviour : MonoBehaviour {
 			rocket.Explode();
 		}
 
+		LootBehaviour loot = other.GetComponent<LootBehaviour>();
+		if (loot != null) {
+			return;
+		}
+
 		ExplosionBehaviour explosion = (ExplosionBehaviour) Instantiate(explosionPrefab, transform.position, Quaternion.identity);
 		explosion.ExplodeAndInstantiate(lootPrefab.gameObject);
 		Destroy(gameObject);
