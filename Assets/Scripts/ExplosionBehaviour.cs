@@ -46,16 +46,10 @@ public class ExplosionBehaviour : MonoBehaviour {
 	}
 	
 	public void OnTriggerEnter(Collider other) {
-		/*PigBehaviour pig = other.GetComponent<PigBehaviour>();
-		TargetTrigger target = other.GetComponent<TargetTrigger>();
-		
-		if (pig != null) {
-			pig.Stun();
+		BadSubBehaviour sub = other.GetComponent<BadSubBehaviour>();
+		if (sub != null) {
+			sub.Destroy();
 		}
-		
-		if (target != null){
-			target.Explode();
-		}*/
 		
 		if (other.rigidbody != null) {
 			Vector3 direction = (other.transform.position - transform.position);
@@ -63,6 +57,8 @@ public class ExplosionBehaviour : MonoBehaviour {
 			direction = direction.normalized;
 			
 			other.rigidbody.AddForce(direction * explosionForce, ForceMode.VelocityChange);
+
+			Debug.Log("Other pushed: " + other);
 		}
 	}
 }

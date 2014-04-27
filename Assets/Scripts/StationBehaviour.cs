@@ -34,17 +34,8 @@ public class StationBehaviour : MonoBehaviour {
 	private void findStation() {
 		if (movementStation != null) {
 			station = movementStation;
-			if (grappleStation != null) {
-				Debug.LogError("Ignoring GrappleStation: " + grappleStation);
-			}
-			if (pumpStation != null) {
-				Debug.LogError("Ignoring PumpStation: " + pumpStation);
-			}
 		} else if (grappleStation != null) {
 			station = grappleStation;
-			if (pumpStation != null) {
-				Debug.LogError("Ignoring PumpStation: " + pumpStation);
-			}
 		} else if (pumpStation != null) {
 			station = pumpStation;
 		} else if (rocketStation != null) {
