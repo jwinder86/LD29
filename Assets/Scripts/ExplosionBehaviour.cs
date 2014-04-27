@@ -60,9 +60,14 @@ public class ExplosionBehaviour : MonoBehaviour {
 	}
 	
 	public void OnTriggerEnter(Collider other) {
+		Debug.Log ("Explosion: " + other);
 		BadSubBehaviour sub = other.GetComponent<BadSubBehaviour>();
+		MovementStationBehaviour yellowSub = other.GetComponent<MovementStationBehaviour>();
 		if (sub != null) {
 			sub.Destroy();
+		}else if(yellowSub != null){
+			WaterClock waterClock = (WaterClock) FindObjectOfType(typeof(WaterClock));
+			waterClock.takeDamage();
 		}
 
 		ChestBehaviour chest = other.GetComponent<ChestBehaviour>();
