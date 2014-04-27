@@ -20,6 +20,7 @@ public class BadSubBehaviour : MonoBehaviour {
 	private float respawnTimer;
 
 	public float playerFireDistance;
+	public float playerFireAngle;
 	public float rocketStartDistance;
 	public float rocketSpeed;
 	public float fireDelay;
@@ -67,6 +68,15 @@ public class BadSubBehaviour : MonoBehaviour {
 		if (fireTimer > 0f) {
 			fireTimer -= Time.deltaTime;
 		}
+
+		Vector3 dir = (playerLocation.position - transform.position).normalized;
+		if (Vector3.Angle(dir, transform.right) > playerFireAngle) {
+			Debug.DrawLine(transform.position, transform.position + dir * playerFireDistance, Color.green);
+		} else {
+			Debug.DrawLine(transform.position, transform.position + dir * playerFireDistance, Color.red);
+		}
+		Debug.DrawLine(transform.position, transform.position + Quaternion.Euler(0f, 0f, playerFireAngle) * transform.right * playerFireDistance);
+		Debug.DrawLine(transform.position, transform.position + Quaternion.Euler(0f, 0f, -playerFireAngle) * transform.right * playerFireDistance);
 	}
 
 	private void StartMoving() {
@@ -104,7 +114,7 @@ public class BadSubBehaviour : MonoBehaviour {
 	private void FireAtPlayer() {
 		Vector3 direction = (playerLocation.position - transform.position).normalized;
 
-		if (Vector3.Angle(direction, transform.right) > 60) {
+		if (Vector3.Angle(direction, transform.right) > playerFireAngle) {
 			return;
 		}
 
@@ -120,6 +130,7 @@ public class BadSubBehaviour : MonoBehaviour {
 			moveRight = !moveRight;
 			
 			for (float t = 0; t <= rotateTime; t += Time.deltaTime) {
+				fireTimer = 0.5f;
 				if (moveRight) {			
 					transform.rotation = Quaternion.Slerp(Quaternion.Euler(new Vector3(0f, 180f, 0f)), Quaternion.Euler(new Vector3(0f, 0f, 0f)), t / rotateTime);
 				} else {

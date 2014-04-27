@@ -3,7 +3,7 @@ using System.Collections;
 
 [RequireComponent (typeof(AudioSource))]
 public class WaterClock : MonoBehaviour {
-
+	private static CameraBehaviour screen = null;
 	private static float[] tickTimes = {5f, 4f, 3f, 2.5f, 2f, 1.5f, 1f, 0.75f, 0.5f, 0.25f, -100f};
 	
 	public float waterMax = 60f;
@@ -173,6 +173,11 @@ public class WaterClock : MonoBehaviour {
 	}
 
 	public void takeDamage(){
+		if (screen == null) {
+			screen = (CameraBehaviour) FindObjectOfType(typeof(CameraBehaviour));
+		}
+		screen.HeavyShakeTime(0.7f);
+
 		Debug.Log("Taking Damage!");
 		leakMultiplyer = leakMultiplyer + damageInc;
 	}
