@@ -3,6 +3,8 @@ using System.Collections;
 
 public class CameraBehaviour : MonoBehaviour {
 
+	public Renderer subFrontRenderer;
+
 	public float nearDistance;
 	public float farDistance;
 
@@ -25,12 +27,15 @@ public class CameraBehaviour : MonoBehaviour {
 
 	private IEnumerator ZoomCoroutine(bool zoomOut) {
 		float startDistance = transform.localPosition.z;
+		subFrontRenderer.enabled = true;
 		
 		for (float time = 0; time <= zoomTime; time += Time.deltaTime) {
 			if (zoomOut) {
 				transform.localPosition = newDistance(Mathf.Lerp(startDistance, farDistance, time / zoomTime));
+				setSubFrontAlpha(time / zoomTime);
 			} else {
 				transform.localPosition = newDistance(Mathf.Lerp(startDistance, nearDistance, time / zoomTime));
+				setSubFrontAlpha(1f - time / zoomTime);
 			}
 			
 			yield return null;
@@ -38,12 +43,20 @@ public class CameraBehaviour : MonoBehaviour {
 		
 		if (zoomOut) {			
 			transform.localPosition = newDistance(farDistance);
+			setSubFrontAlpha(1f);
 		} else {
 			transform.localPosition = newDistance(nearDistance);
+			setSubFrontAlpha(0f);
+			subFrontRenderer.enabled = false;
 		}
 	}
 
 	private Vector3 newDistance(float distance) {
 		return new Vector3(transform.localPosition.x, transform.localPosition.y, distance);
+	}
+
+	private void setSubFrontAlpha(float alpha) {
+		Color oldColor = subFrontRenderer.material.color;
+		subFrontRenderer.material.color = new Color(oldColor.r, oldColor.g, oldColor.b, alpha);
 	}
 }
