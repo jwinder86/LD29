@@ -12,9 +12,17 @@ public class BadSubBehaviour : MonoBehaviour {
 	public bool startRight;
 
 	public ExplosionBehaviour explosionPrefab;
+	public RocketBehaviour rocketPrefab;
+
 	public float respawnDistance;
 	public float respawnTime = 5f;
 	private float respawnTimer;
+
+	public float playerFireDistance;
+	public float rocketStartDistance;
+	public float rocketSpeed;
+	public float fireDelay;
+	private float fireTimer;
 	
 	private bool moveRight;
 	private bool alive;
@@ -41,6 +49,10 @@ public class BadSubBehaviour : MonoBehaviour {
 			} else if (!moveRight && rigidbody.velocity.x > -maxSpeed) {
 				rigidbody.AddForce(new Vector3(-subAccel, 0f, 0f), ForceMode.Acceleration);
 			}
+
+			if (fireTimer <= 0f && (transform.position - playerLocation.position).magnitude < playerFireDistance) {
+				FireAtPlayer();
+			}
 		} else {
 			if (respawnTimer <= 0f && (playerLocation.position - startPos).magnitude > respawnDistance) {
 				StartMoving();
@@ -49,6 +61,10 @@ public class BadSubBehaviour : MonoBehaviour {
 
 		if (respawnTimer > 0f) {
 			respawnTimer -= Time.deltaTime;
+		}
+
+		if (fireTimer > 0f) {
+			fireTimer -= Time.deltaTime;
 		}
 	}
 
@@ -60,6 +76,7 @@ public class BadSubBehaviour : MonoBehaviour {
 		collider.enabled = true;
 		alive = true;
 		respawnTimer = 0f;
+		fireTimer = 0f;
 
 		moveRight = startRight;
 		transform.position = startPos;
@@ -81,6 +98,20 @@ public class BadSubBehaviour : MonoBehaviour {
 
 		respawnTimer = respawnTime;
 		StopAllCoroutines();
+	}
+
+	private void FireAtPlayer() {
+		Vector3 direction = (playerLocation.position - transform.position).normalized;
+
+		if (Vector3.Angle(direction, transform.right) > 60) {
+			return;
+		}
+
+		float angle = Mathf.Rad2Deg * Mathf.Atan2(direction.y, direction.x);
+		RocketBehaviour rocket = (RocketBehaviour) Instantiate(rocketPrefab, transform.position + direction * rocketStartDistance, Quaternion.Euler(new Vector3(0f, 0f, angle)));
+		rocket.rigidbody.velocity = direction * rocketSpeed;
+
+		fireTimer = fireDelay;
 	}
 
 	private IEnumerator ChangeDirection() {
