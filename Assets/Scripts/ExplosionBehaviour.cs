@@ -29,7 +29,7 @@ public class ExplosionBehaviour : MonoBehaviour {
 			screen = (CameraBehaviour) FindObjectOfType(typeof(CameraBehaviour));
 		}
 		
-		//screen.ShakeTime(0.5f);
+		screen.ShakeTime(0.5f);
 	}
 
 	public void ExplodeAndInstantiate(GameObject obj) {
@@ -39,12 +39,12 @@ public class ExplosionBehaviour : MonoBehaviour {
 			screen = (CameraBehaviour) FindObjectOfType(typeof(CameraBehaviour));
 		}
 		
-		//screen.ShakeTime(0.5f);
+		screen.ShakeTime(0.5f);
 	}
 	
 	private IEnumerator ExplodeAction(GameObject obj) {
 		particleSystem.Play();
-		Common.playSound(this.audio, explosionSound);
+		audio.PlayOneShot(explosionSound);
 		
 		yield return new WaitForSeconds(0.5f);
 		

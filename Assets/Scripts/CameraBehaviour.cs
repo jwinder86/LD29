@@ -58,15 +58,27 @@ public class CameraBehaviour : MonoBehaviour {
 
 	// Update is called once per frame
 	void LateUpdate () {
-		Vector3 newPosition = new Vector3(0f, 0f, transform.localPosition.z);
-		
-		if (heavyShakeTimer > 0f) {
-			newPosition += heavyShakeMagnitude * heavyShakeTimer * new Vector3(Mathf.Sin(Time.time * heavyShakeSpeed * X_COEF), Mathf.Cos(Time.time * heavyShakeSpeed * Y_COEF), 0f);
-		}else if (shakeTimer > 0f) {
-			newPosition += shakeMagnitude * shakeTimer * new Vector3(Mathf.Sin(Time.time * shakeSpeed * X_COEF), Mathf.Cos(Time.time * shakeSpeed * Y_COEF), 0f);
+		if (transform.parent != null) {
+			Vector3 newPosition = new Vector3(0f, 0f, transform.localPosition.z);
+			
+			if (heavyShakeTimer > 0f) {
+				newPosition += heavyShakeMagnitude * heavyShakeTimer * new Vector3(Mathf.Sin(Time.time * heavyShakeSpeed * X_COEF), Mathf.Cos(Time.time * heavyShakeSpeed * Y_COEF), 0f);
+			} else if (shakeTimer > 0f) {
+				newPosition += shakeMagnitude * shakeTimer * new Vector3(Mathf.Sin(Time.time * shakeSpeed * X_COEF), Mathf.Cos(Time.time * shakeSpeed * Y_COEF), 0f);
+			}
+			
+			transform.localPosition = newPosition;
+		} else {
+			Vector3 newPosition = transform.position;
+			
+			if (heavyShakeTimer > 0f) {
+				newPosition += heavyShakeMagnitude * heavyShakeTimer * new Vector3(Mathf.Sin(Time.time * heavyShakeSpeed * X_COEF), Mathf.Cos(Time.time * heavyShakeSpeed * Y_COEF), 0f);
+			} else if (shakeTimer > 0f) {
+				newPosition += shakeMagnitude * shakeTimer * new Vector3(Mathf.Sin(Time.time * shakeSpeed * X_COEF), Mathf.Cos(Time.time * shakeSpeed * Y_COEF), 0f);
+			}
+			
+			transform.position = newPosition;
 		}
-		
-		transform.localPosition = newPosition;
 	}
 
 	public void zoomCamera(bool zoomOut) {
@@ -112,5 +124,15 @@ public class CameraBehaviour : MonoBehaviour {
 	private void setBackgroundColor(Color color) {
 		Camera.main.backgroundColor = color;
 		RenderSettings.fogColor = color;
+	}
+
+	public void ShakeTime(float time) {
+		Debug.Log("Shaking for: " + time);
+		shakeTimer = time;
+	}
+	
+	public void HeavyShakeTime(float time) {
+		Debug.Log("Heavy Shaking for: " + time);
+		heavyShakeTimer = time;
 	}
 }
