@@ -23,7 +23,17 @@ public class ExplosionBehaviour : MonoBehaviour {
 	}
 	
 	public void Explode() {
-		StartCoroutine(ExplodeAction());
+		StartCoroutine(ExplodeAction(null));
+		
+		if (screen == null) {
+			screen = (CameraBehaviour) FindObjectOfType(typeof(CameraBehaviour));
+		}
+		
+		//screen.ShakeTime(0.5f);
+	}
+
+	public void ExplodeAndInstantiate(GameObject obj) {
+		StartCoroutine(ExplodeAction(obj));
 		
 		if (screen == null) {
 			screen = (CameraBehaviour) FindObjectOfType(typeof(CameraBehaviour));
@@ -32,13 +42,17 @@ public class ExplosionBehaviour : MonoBehaviour {
 		//screen.ShakeTime(0.5f);
 	}
 	
-	private IEnumerator ExplodeAction() {
+	private IEnumerator ExplodeAction(GameObject obj) {
 		particleSystem.Play();
 		audio.PlayOneShot(explosionSound);
 		
 		yield return new WaitForSeconds(0.5f);
 		
 		collider.enabled = false;
+
+		if (obj != null) {
+			Instantiate(obj, transform.position, Quaternion.identity);
+		}
 		
 		yield return new WaitForSeconds(5f);
 		

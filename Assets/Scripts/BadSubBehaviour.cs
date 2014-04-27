@@ -13,6 +13,7 @@ public class BadSubBehaviour : MonoBehaviour {
 
 	public ExplosionBehaviour explosionPrefab;
 	public RocketBehaviour rocketPrefab;
+	public LootBehaviour lootPrefab;
 
 	public float respawnDistance;
 	public float respawnTime = 5f;
@@ -87,7 +88,7 @@ public class BadSubBehaviour : MonoBehaviour {
 
 	public void Destroy() {
 		ExplosionBehaviour explosion = (ExplosionBehaviour) Instantiate(explosionPrefab, transform.position, Quaternion.identity);
-		explosion.Explode();
+		explosion.ExplodeAndInstantiate(lootPrefab.gameObject);
 
 		foreach (Renderer renderer in renderers) {
 			renderer.enabled = false;
