@@ -61,7 +61,7 @@ public class RocketStationBehaviour : MonoBehaviour, Station {
 	}
 
 	public void useStation(bool engage, PigBehaviour other) {
-		audio.PlayOneShot(activateStationSound);
+		Common.playSound(this.audio, activateStationSound);
 		if (engage) {
 			rigidbody.isKinematic = false;
 			engaged = true;

@@ -184,7 +184,7 @@ public class PigBehaviour : MonoBehaviour {
 	public void Die() {
 		if (!isDead && waterClock.isGameRunning()) {
 			isDead = true;
-			audio.PlayOneShot(deathSound);
+			Common.playSound(this.audio, deathSound);
 			transform.localRotation = Quaternion.Euler(new Vector3(0f, -180f, 0f));
 
 			useStation(null);

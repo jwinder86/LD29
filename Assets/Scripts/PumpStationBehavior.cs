@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[RequireComponent (typeof(AudioSource))]
 public class PumpStationBehavior : MonoBehaviour, Station {
 
 	public CameraBehaviour subCamera;
 
 	public WaterClock waterClock;
-
+	public AudioClip activateStationSound;
 	private bool engaged;
 
 
@@ -32,7 +33,9 @@ public class PumpStationBehavior : MonoBehaviour, Station {
 		} else {
 			engaged = false;
 			other.useStation(null);
+			audio.Stop ();
 			//subCamera.zoomCamera(false);
 		}
+		audio.PlayOneShot(activateStationSound);
 	}
 }

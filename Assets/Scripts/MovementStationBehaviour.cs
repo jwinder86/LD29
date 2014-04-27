@@ -30,7 +30,7 @@ public class MovementStationBehaviour : MonoBehaviour, Station {
 	public void directionalInput(Vector2 moveVector) {
 		if (engaged) {
 			if(!audio.isPlaying){
-				audio.PlayOneShot(movementSound);
+				Common.playSound(this.audio, movementSound);
 			}			
 			if (rigidbody.velocity.magnitude < maxSpeed) {
 				rigidbody.AddForce(moveVector * movementAccel, ForceMode.Acceleration);
