@@ -101,7 +101,7 @@ public class PigBehaviour : MonoBehaviour {
 				if (ladderCollider.OnLadder()){
 					if (Input.GetAxisRaw("Vertical") < 0f) {
 						fixKinematic();
-						rigidbody.velocity = new Vector3(submarineBody.velocity.x, rigidbody.velocity.y - runSpeed , 0f);
+						rigidbody.velocity = new Vector3(submarineBody.velocity.x, submarineBody.velocity.y - runSpeed , 0f);
 						ladderFloorPanel.enabled = false;
 						animation.Play("StandAnimation", PlayMode.StopAll);
 
@@ -111,7 +111,7 @@ public class PigBehaviour : MonoBehaviour {
 						
 					} else if (Input.GetAxisRaw("Vertical") > 0f) {
 						fixKinematic();
-						rigidbody.velocity = new Vector3(submarineBody.velocity.x, rigidbody.velocity.y + runSpeed,  0f);
+						rigidbody.velocity = new Vector3(submarineBody.velocity.x, submarineBody.velocity.y + runSpeed,  0f);
 						ladderFloorPanel.enabled = false;
 						animation.Play("StandAnimation", PlayMode.StopAll);
 

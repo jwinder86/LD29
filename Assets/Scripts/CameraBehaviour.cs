@@ -3,6 +3,18 @@ using System.Collections;
 
 public class CameraBehaviour : MonoBehaviour {
 
+	private static readonly float X_COEF = 5f;
+	private static readonly float Y_COEF = 7f;
+	
+	public float shakeMagnitude;
+	public float shakeSpeed;
+	
+	public float heavyShakeMagnitude;
+	public float heavyShakeSpeed;
+	
+	private float shakeTimer;
+	private float heavyShakeTimer;
+
 	public Renderer subFrontRenderer;
 
 	public float nearDistance;
@@ -26,6 +38,14 @@ public class CameraBehaviour : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if (shakeTimer > 0f) {
+			shakeTimer -= Time.deltaTime;
+		}
+		
+		if (heavyShakeTimer > 0f) {
+			heavyShakeTimer -= Time.deltaTime;
+		}
+
 		if (transform.position.y > startDepth) {
 			setBackgroundColor(startColor);
 		} else if (transform.position.y < endDepth) {
@@ -34,6 +54,19 @@ public class CameraBehaviour : MonoBehaviour {
 			float frac = (transform.position.y - endDepth) / (startDepth - endDepth);
 			setBackgroundColor(Color.Lerp(endColor, startColor, frac));
 		}
+	}
+
+	// Update is called once per frame
+	void LateUpdate () {
+		Vector3 newPosition = new Vector3(0f, 0f, transform.localPosition.z);
+		
+		if (heavyShakeTimer > 0f) {
+			newPosition += heavyShakeMagnitude * heavyShakeTimer * new Vector3(Mathf.Sin(Time.time * heavyShakeSpeed * X_COEF), Mathf.Cos(Time.time * heavyShakeSpeed * Y_COEF), 0f);
+		}else if (shakeTimer > 0f) {
+			newPosition += shakeMagnitude * shakeTimer * new Vector3(Mathf.Sin(Time.time * shakeSpeed * X_COEF), Mathf.Cos(Time.time * shakeSpeed * Y_COEF), 0f);
+		}
+		
+		transform.localPosition = newPosition;
 	}
 
 	public void zoomCamera(bool zoomOut) {
