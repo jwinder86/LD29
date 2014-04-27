@@ -12,6 +12,8 @@ public class MovementStationBehaviour : MonoBehaviour, Station {
 	public AudioClip movementSound;
 	public AudioClip activateStationSound;
 
+	public ParticleSystem particles;
+
 	private bool engaged;
 
 	// Use this for initialization
@@ -44,11 +46,13 @@ public class MovementStationBehaviour : MonoBehaviour, Station {
 			engaged = true;
 			other.useStation(this);
 			subCamera.zoomCamera(true);
+			particles.Play();
 		} else {
 			rigidbody.isKinematic = true;
 			engaged = false;
 			other.useStation(null);
 			subCamera.zoomCamera(false);
+			particles.Stop();
 		}
 	}
 
