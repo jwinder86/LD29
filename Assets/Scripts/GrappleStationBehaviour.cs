@@ -4,6 +4,7 @@ using System.Collections;
 [RequireComponent (typeof (Collider))]
 [RequireComponent (typeof (Renderer))]
 [RequireComponent (typeof(AudioSource))]
+[RequireComponent (typeof (LineRenderer))]
 public class GrappleStationBehaviour : MonoBehaviour, Station {
 
 	public Transform submarine;
@@ -11,6 +12,8 @@ public class GrappleStationBehaviour : MonoBehaviour, Station {
 	public LootCounterBehaviour lootCounter;
 
 	public CameraBehaviour subCamera;
+
+	public ParticleSystem particles;
 
 	public Texture2D crosshairTex;
 	public Color crosshairColor;
@@ -22,10 +25,13 @@ public class GrappleStationBehaviour : MonoBehaviour, Station {
 
 	public float moveSpeed;
 	public float moveTime;
+	public float startDistance;
 
 	private bool engaged;
 	private bool firing;
 	private float moveTimer;
+
+	private LineRenderer line;
 
 	private LootBehaviour currentLoot;
 
@@ -35,6 +41,8 @@ public class GrappleStationBehaviour : MonoBehaviour, Station {
 		currentLoot = null;
 		firing = false;
 		renderer.enabled = false;
+		line = GetComponent<LineRenderer>();
+		line.SetVertexCount(2);
 	}
 	
 	// Update is called once per frame
@@ -44,6 +52,13 @@ public class GrappleStationBehaviour : MonoBehaviour, Station {
 				Vector3 fireDirection = relativeMouse(Input.mousePosition).normalized;
 				StartCoroutine(FireCoroutine(fireDirection));
 			}
+		}
+	}
+
+	void LateUpdate() {
+		if (firing) {
+			line.SetPosition(0, transform.position);
+			line.SetPosition(1, subPosition());
 		}
 	}
 
@@ -63,11 +78,15 @@ public class GrappleStationBehaviour : MonoBehaviour, Station {
 	IEnumerator FireCoroutine(Vector3 direction) {
 		firing = true;
 		moveTimer = 0f;
-		transform.position = subPosition();
+		float angle = Mathf.Rad2Deg * Mathf.Atan2(direction.y, direction.x) - 90f;
+		transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, angle));
+		transform.position = subPosition() + direction * startDistance;
 		renderer.enabled = true;
+		line.enabled = true;
 		transform.parent = null;
 
 		audio.PlayOneShot(fireSound);
+		particles.Emit(20);
 
 		// move out
 		while (moveTimer < moveTime && currentLoot == null) {
@@ -83,6 +102,10 @@ public class GrappleStationBehaviour : MonoBehaviour, Station {
 		while (moveTimer > 0f) {
 			transform.position = Vector3.Lerp(farthestPosition, subPosition(), 1f - moveTimer / maxTimer);
 			moveTimer -= Time.deltaTime;
+
+			if ((transform.position - subPosition()).magnitude < startDistance) {
+				break;
+			}
 			
 			yield return null;
 		}
@@ -90,6 +113,7 @@ public class GrappleStationBehaviour : MonoBehaviour, Station {
 		firing = false;
 		moveTimer = 0f;
 		renderer.enabled = false;
+		line.enabled = false;
 
 		if (currentLoot != null) {
 			lootCounter.addLoot(currentLoot.getValue());

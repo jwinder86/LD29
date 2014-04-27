@@ -22,7 +22,8 @@ public class RandomColor : MonoBehaviour {
 	}
 
 	private void setRandomColor() {
-		index += Random.Range(0, altColors.Length - 1) % altColors.Length;
+		index += Random.Range(1, altColors.Length);
+		index %= altColors.Length;
 		
 		if (index < altColors.Length) {
 			renderer.material.color = altColors[index];
@@ -33,7 +34,7 @@ public class RandomColor : MonoBehaviour {
 		while (true) {
 			setRandomColor();
 
-			yield return new WaitForSeconds(Random.Range(1f, 8f));
+			yield return new WaitForSeconds(Random.Range(3f, 8f));
 		}
 	}
 }
