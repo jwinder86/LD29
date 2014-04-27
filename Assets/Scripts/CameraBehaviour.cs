@@ -10,6 +10,11 @@ public class CameraBehaviour : MonoBehaviour {
 
 	public float zoomTime;
 
+	public Color startColor;
+	public float startDepth;
+	public Color endColor;
+	public float endDepth;
+
 	// Use this for initialization
 	void Start () {
 	
@@ -17,7 +22,14 @@ public class CameraBehaviour : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		if (transform.position.y > startDepth) {
+			setBackgroundColor(startColor);
+		} else if (transform.position.y < endDepth) {
+			setBackgroundColor(endColor);
+		} else {
+			float frac = (transform.position.y - endDepth) / (startDepth - endDepth);
+			setBackgroundColor(Color.Lerp(endColor, startColor, frac));
+		}
 	}
 
 	public void zoomCamera(bool zoomOut) {
@@ -58,5 +70,10 @@ public class CameraBehaviour : MonoBehaviour {
 	private void setSubFrontAlpha(float alpha) {
 		Color oldColor = subFrontRenderer.material.color;
 		subFrontRenderer.material.color = new Color(oldColor.r, oldColor.g, oldColor.b, alpha);
+	}
+
+	private void setBackgroundColor(Color color) {
+		Camera.main.backgroundColor = color;
+		RenderSettings.fogColor = color;
 	}
 }
