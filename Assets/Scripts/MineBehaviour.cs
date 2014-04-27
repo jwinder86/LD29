@@ -17,6 +17,11 @@ public class MineBehaviour : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider other) {
+		RocketBehaviour rocket = other.GetComponent<RocketBehaviour>();
+		if (rocket != null) {
+			rocket.Explode();
+		}
+
 		ExplosionBehaviour explosion = (ExplosionBehaviour) Instantiate(explosionPrefab, transform.position, Quaternion.identity);
 		explosion.Explode();
 		Destroy(gameObject);

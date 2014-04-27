@@ -45,7 +45,7 @@ public class RocketBehaviour : MonoBehaviour {
 		Explode();
 	}
 	
-	private void Explode() {
+	public void Explode() {
 		if (!exploded) {
 			exploded = true;
 			
