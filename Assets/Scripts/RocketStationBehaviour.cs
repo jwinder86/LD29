@@ -64,12 +64,12 @@ public class RocketStationBehaviour : MonoBehaviour, Station {
 
 		if (engage) {
 			Common.playSound(this.audio, activateStationSound);
-			rigidbody.isKinematic = false;
+			//rigidbody.isKinematic = false;
 			engaged = true;
 			other.useStation(this);
 			subCamera.zoomCamera(true);
 		} else {
-			rigidbody.isKinematic = true;
+			//rigidbody.isKinematic = true;
 			engaged = false;
 			other.useStation(null);
 			subCamera.zoomCamera(false);
