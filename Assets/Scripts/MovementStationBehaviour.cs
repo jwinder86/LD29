@@ -2,12 +2,15 @@
 using System.Collections;
 
 [RequireComponent (typeof (Transform))]
+[RequireComponent (typeof(AudioSource))]
 public class MovementStationBehaviour : MonoBehaviour, Station {
 
 	public CameraBehaviour subCamera;
 
 	public float movementAccel = 3f;
 	public float maxSpeed = 5f;
+	public AudioClip movementSound;
+	public AudioClip activateStationSound;
 
 	private bool engaged;
 
@@ -19,17 +22,23 @@ public class MovementStationBehaviour : MonoBehaviour, Station {
 	// Update is called once per frame
 	void Update () {
 		directionalInput(new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")));
+
 	}
 
 	public void directionalInput(Vector2 moveVector) {
 		if (engaged) {
+			if(!audio.isPlaying){
+				audio.PlayOneShot(movementSound);
+			}			
 			if (rigidbody.velocity.magnitude < maxSpeed) {
 				rigidbody.AddForce(moveVector * movementAccel, ForceMode.Acceleration);
 			}
-		}
+		}	
+
 	}
 
 	public void useStation(bool engage, PigBehaviour other) {
+		audio.PlayOneShot(activateStationSound);
 		if (engage) {
 			rigidbody.isKinematic = false;
 			engaged = true;

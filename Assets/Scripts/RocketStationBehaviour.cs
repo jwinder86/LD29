@@ -10,6 +10,7 @@ public class RocketStationBehaviour : MonoBehaviour, Station {
 	public float fireDistance;
 	public float fireDelay;
 	public float fireSpeed;
+	public AudioClip activateStationSound;
 
 	public Texture2D crosshairTex;
 	public Color crosshairColor;
@@ -60,6 +61,7 @@ public class RocketStationBehaviour : MonoBehaviour, Station {
 	}
 
 	public void useStation(bool engage, PigBehaviour other) {
+		audio.PlayOneShot(activateStationSound);
 		if (engage) {
 			rigidbody.isKinematic = false;
 			engaged = true;
