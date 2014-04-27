@@ -23,7 +23,7 @@ public class RocketBehaviour : MonoBehaviour {
 	void Start () {
 		exploded = false;
 		
-		audio.PlayOneShot(thrustSound);
+		Common.playSound(this.audio, thrustSound);
 		
 		StartCoroutine(LifetimeAction());
 	}

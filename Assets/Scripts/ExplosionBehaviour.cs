@@ -44,7 +44,7 @@ public class ExplosionBehaviour : MonoBehaviour {
 	
 	private IEnumerator ExplodeAction(GameObject obj) {
 		particleSystem.Play();
-		audio.PlayOneShot(explosionSound);
+		Common.playSound(this.audio, explosionSound);
 		
 		yield return new WaitForSeconds(0.5f);
 		
