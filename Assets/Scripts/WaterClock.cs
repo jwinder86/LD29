@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[RequireComponent (typeof(AudioSource))]
 public class WaterClock : MonoBehaviour {
 
 	private static float[] tickTimes = {5f, 4f, 3f, 2.5f, 2f, 1.5f, 1f, 0.75f, 0.5f, 0.25f, -100f};
 	
 	public float waterMax = 60f;
 	public float pumpRate = 4f;
+
 
 	public TimerBarBehaviour display;
 	
@@ -23,6 +25,7 @@ public class WaterClock : MonoBehaviour {
 
 	private float leakMultiplyer;
 
+	public AudioClip pumpSound;
 	public AudioClip moreTime;
 	public AudioClip tickSound;
 	
@@ -58,13 +61,16 @@ public class WaterClock : MonoBehaviour {
 			// activated pump
 			if(pumpingWater && waterLevel >= 0f){
 				waterLevel = waterLevel - pumpRate*Time.deltaTime;
+				if(!audio.isPlaying){
+					audio.PlayOneShot(pumpSound);
+				}
 				if(waterLevel <0f){
 					waterLevel = 0f;
 				}
 			// water leaking
 			}else if(waterLevel >= 0f){
 				waterLevel = waterLevel + leakMultiplyer*Time.deltaTime;
-							
+				audio.Stop();
 			}
 			
 			// don't allow the water clock to be higher than waterMax

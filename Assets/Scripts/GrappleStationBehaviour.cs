@@ -3,6 +3,7 @@ using System.Collections;
 
 [RequireComponent (typeof (Collider))]
 [RequireComponent (typeof (Renderer))]
+[RequireComponent (typeof(AudioSource))]
 public class GrappleStationBehaviour : MonoBehaviour, Station {
 
 	public Transform submarine;
@@ -14,6 +15,10 @@ public class GrappleStationBehaviour : MonoBehaviour, Station {
 	public Texture2D crosshairTex;
 	public Color crosshairColor;
 	public int texSize = 64;
+
+	public AudioClip fireSound;
+	public AudioClip activateStationSound;
+	public AudioClip lootSound;
 
 	public float moveSpeed;
 	public float moveTime;
@@ -62,6 +67,8 @@ public class GrappleStationBehaviour : MonoBehaviour, Station {
 		renderer.enabled = true;
 		transform.parent = null;
 
+		audio.PlayOneShot(fireSound);
+
 		// move out
 		while (moveTimer < moveTime && currentLoot == null) {
 			transform.position += direction * moveSpeed * Time.deltaTime;
@@ -92,6 +99,7 @@ public class GrappleStationBehaviour : MonoBehaviour, Station {
 	}
 
 	public void useStation(bool engage, PigBehaviour other) {
+		audio.PlayOneShot(activateStationSound);
 		if (engage) {
 			engaged = true;
 			other.useStation(this);
@@ -116,6 +124,7 @@ public class GrappleStationBehaviour : MonoBehaviour, Station {
 	private void attachLoot(LootBehaviour loot) {
 		this.currentLoot = loot;
 		loot.attachTo(transform);
+		audio.PlayOneShot(lootSound);
 	}
 
 	void OnTriggerEnter(Collider other) {
