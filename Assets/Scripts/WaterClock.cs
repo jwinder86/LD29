@@ -26,8 +26,10 @@ public class WaterClock : MonoBehaviour {
 	private float leakMultiplyer;
 
 	public AudioClip pumpSound;
-	public AudioClip moreTime;
-	public AudioClip tickSound;
+	public AudioClip warning1Sound;
+	public AudioClip warning2Sound;
+	//public AudioClip moreTime;
+	//public AudioClip tickSound;
 	
 	private int tickIndex;
 	
@@ -59,6 +61,7 @@ public class WaterClock : MonoBehaviour {
 		//Debug.Log("gamerunning: " + gameRunning + "| waterLevel: " + waterLevel + "waterMax" + waterMax);
 		if (gameRunning) {
 			// activated pump
+
 			if(pumpingWater && waterLevel >= 0f){
 				waterLevel = waterLevel - pumpRate*Time.deltaTime;
 				if(!audio.isPlaying){
@@ -71,8 +74,15 @@ public class WaterClock : MonoBehaviour {
 			}else if(waterLevel >= 0f){
 				waterLevel = waterLevel + leakMultiplyer*Time.deltaTime;
 				audio.Stop();
+//				if (waterLevel/waterMax > 0.5f && waterLevel/waterMax  < 0.75f && !audio.isPlaying){
+//					audio.PlayOneShot(warning1Sound);
+//				}else if(waterLevel/waterMax > 0.75f && !audio.isPlaying){
+//					audio.PlayOneShot(warning2Sound);
+//				}
 			}
-			
+
+
+
 			// don't allow the water clock to be higher than waterMax
 			if(waterLevel >= waterMax){
 				waterLevel = waterMax;
