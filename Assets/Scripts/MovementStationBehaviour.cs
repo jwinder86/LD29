@@ -62,6 +62,7 @@ public class MovementStationBehaviour : MonoBehaviour, Station {
 	public void sinkSub(){
 		engaged = false;
 		subCamera.zoomCamera(true);
+		subCamera.HeavyShakeTime(1.5f);
 		//rigidbody.isKinematic = false;
 		rigidbody.useGravity = true;
 		rigidbody.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationX;
