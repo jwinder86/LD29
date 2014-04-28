@@ -76,6 +76,11 @@ public class ExplosionBehaviour : MonoBehaviour {
 		if (chest != null) {
 			chest.Explode();
 		}
+
+		RocketBehaviour rocket = other.GetComponent<RocketBehaviour>();
+		if (rocket != null) {
+			rocket.Explode();
+		}
 		
 		if (other.rigidbody != null) {
 			Vector3 direction = (other.transform.position - transform.position);

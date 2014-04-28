@@ -6,6 +6,7 @@ using System.Collections;
 public class LootBehaviour : MonoBehaviour {
 
 	public int value;
+	public bool alertKraken = false;
 	private bool attached;
 
 	// Use this for initialization
@@ -23,8 +24,21 @@ public class LootBehaviour : MonoBehaviour {
 	}
 
 	public void attachTo(Transform otherTransform) {
-		rigidbody.isKinematic = true;
-		collider.enabled = false;
-		transform.parent = otherTransform;
+		if (!attached) {
+			rigidbody.isKinematic = true;
+			collider.enabled = false;
+			transform.parent = otherTransform;
+			attached = true;
+
+			if (alertKraken) {
+				TentacleBehaviour[] tentacles = FindObjectsOfType(typeof(TentacleBehaviour)) as TentacleBehaviour[];
+				foreach (TentacleBehaviour tentacle in tentacles) {
+					tentacle.hide();
+				}
+
+				CameraBehaviour camera = FindObjectOfType(typeof(CameraBehaviour)) as CameraBehaviour;
+				camera.HeavyShakeTime(3f);
+			}
+		}
 	}
 }
