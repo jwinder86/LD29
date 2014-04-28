@@ -94,12 +94,12 @@ public class WaterClock : MonoBehaviour {
 		//playTick();
 
 
-		if(Input.GetKeyDown ("r")){
-			StartCoroutine(ReloadLevel());
-		}
-		if(Input.GetKeyDown ("f")){
-			takeDamage();
-		}
+//		if(Input.GetKeyDown ("r")){
+//			StartCoroutine(ReloadLevel());
+//		}
+//		if(Input.GetKeyDown ("f")){
+//			takeDamage();
+//		}
 		display.setStatus(waterLevel / waterMax, waterLevel);
 
 	}
