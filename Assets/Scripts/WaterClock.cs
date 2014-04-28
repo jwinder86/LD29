@@ -30,10 +30,6 @@ public class WaterClock : MonoBehaviour {
 
 	public AudioClip pumpSound;
 	public AudioClip geiserSound;
-
-
-	//public AudioClip moreTime;
-	//public AudioClip tickSound;
 	
 	private int tickIndex;
 	
@@ -68,8 +64,8 @@ public class WaterClock : MonoBehaviour {
 			// activated pump
 			if(pumpingWater && waterLevel > 0f && leakMultiplyer < (pumpRate/2)){
 				 // pump still working
-					waterLevel = waterLevel - pumpRate*Time.deltaTime;
-					audio.PlayOneShot(pumpSound);
+				waterLevel = waterLevel - pumpRate*Time.deltaTime;
+				Common.playSound(audio, pumpSound);
 
 				if(waterLevel <0f){
 					waterLevel = 0f;
@@ -89,14 +85,7 @@ public class WaterClock : MonoBehaviour {
 				waterLevel = waterMax;
 				GameOver();
 			}
-		} 
-//		else {
-//			if (waterLevel <= 0f) {
-//
-//			}
-//		}
-		
-		//playTick();
+		}
 
 
 //		if(Input.GetKeyDown ("r")){
@@ -107,22 +96,7 @@ public class WaterClock : MonoBehaviour {
 //		}
 
 		display.setStatus(waterLevel / waterMax, waterLevel);
-
 	}
-	
-	
-//	public void increaseClock(float amount){
-//		if (gameRunning) {
-//			waterLevel -= amount;
-//			//display.setShakeTime(0.5f);
-//			f
-//			//resetTick();
-//			
-//			audio.PlayOneShot(moreTime);
-//			
-//			//Debug.Log ("decreasing water: " + amount + " = " + waterLevel);
-//		}
-//	}
 	
 	
 	public void GameOver() {
@@ -226,24 +200,6 @@ public class WaterClock : MonoBehaviour {
 	public float getWaterLevel(){
 		return waterLevel;
 	}
-
-//	private void playTick() {
-//		if (waterLevel < tickTimes[tickIndex]) {
-//			audio.PlayOneShot(tickSound);
-//			tickIndex++;
-//		}
-//	}
-	
-//	private void resetTick() {
-//		for (int i = 0; i < tickTimes.Length; i++) {
-//			if (tickTimes[i] < waterLevel) {
-//				tickIndex = i;
-//				break;
-//			}
-//		}
-//		
-//		Debug.Log("New Tick Time" + tickIndex);
-//	}
 
 	public float getHullHealth(){
 		float damage= getLeakMultiplyer();

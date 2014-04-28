@@ -18,23 +18,23 @@ public class PumpStationBehavior : MonoBehaviour, Station {
 	
 	// Update is called once per frame
 	void Update () {
-		if (engaged) {
+		/*if (engaged) {
 			waterClock.setPumpingWater(true);
 		}else{
 			waterClock.setPumpingWater(false);
-		}
+		}*/
 	}
 
 	public void useStation(bool engage, PigBehaviour other) {
 		if (engage) {
 			engaged = true;
 			other.useStation(this);
-			//subCamera.zoomCamera(true);
+			waterClock.setPumpingWater(true);
 		} else {
 			engaged = false;
 			other.useStation(null);
+			waterClock.setPumpingWater(false);
 			audio.Stop ();
-			//subCamera.zoomCamera(false);
 		}
 		audio.PlayOneShot(activateStationSound);
 	}
