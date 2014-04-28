@@ -196,7 +196,7 @@ public class WaterClock : MonoBehaviour {
 			damageLeaks[2].Play();
 		}
 
-		if (getHullHealth() <= 20f && damageLeaks.Length > 2 && !damageLeaks[3].isPlaying) {
+		if (getHullHealth() <= 20f && damageLeaks.Length > 3 && !damageLeaks[3].isPlaying) {
 			damageLeaks[3].Play();
 		}
 	}
