@@ -11,6 +11,8 @@ public class WaterClock : MonoBehaviour {
 	public float damageInc = 0.2f;
 
 	public TimerBarBehaviour display;
+
+	public ParticleSystem[] damageLeaks;
 	
 	private float waterLevel;
 
@@ -181,6 +183,22 @@ public class WaterClock : MonoBehaviour {
 
 		Debug.Log("Taking Damage!");
 		leakMultiplyer = leakMultiplyer + damageInc;
+
+		if (getHullHealth() < 100f && damageLeaks.Length > 0 && !damageLeaks[0].isPlaying) {
+			damageLeaks[0].Play();
+		}
+
+		if (getHullHealth() <= 70f && damageLeaks.Length > 1 && !damageLeaks[1].isPlaying) {
+			damageLeaks[1].Play();
+		}
+
+		if (getHullHealth() <= 50f && damageLeaks.Length > 2 && !damageLeaks[2].isPlaying) {
+			damageLeaks[2].Play();
+		}
+
+		if (getHullHealth() <= 20f && damageLeaks.Length > 2 && !damageLeaks[3].isPlaying) {
+			damageLeaks[3].Play();
+		}
 	}
 
 	public float getLeakMultiplyer(){
