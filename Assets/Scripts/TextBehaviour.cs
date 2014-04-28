@@ -51,7 +51,9 @@ public class TextBehaviour : MonoBehaviour {
 		textTable.Add("fireInstructions1",
 		              "The Weapons Terminal can be used to fire torpedos.\n" +
 		              "Aim using the mouse and click [left-mouse] to\n" +
-		              "launch a torpedo.");
+		              "launch a torpedo.\n\n" +
+		              "Watch out for other submarines that want to steal\n" +
+		              "your treasure.");
 
 		textTable.Add("grappleInstructions1",
 		              "The Grappling Hook Terminal\n" +
