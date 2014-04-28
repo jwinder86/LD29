@@ -28,6 +28,7 @@ public class WaterClock : MonoBehaviour {
 	public float leakMultiplyer;
 
 	public AudioClip pumpSound;
+	public AudioClip geiserSound;
 
 
 	//public AudioClip moreTime;
@@ -102,6 +103,7 @@ public class WaterClock : MonoBehaviour {
 //		if(Input.GetKeyDown ("f")){
 //			takeDamage();
 //		}
+
 		display.setStatus(waterLevel / waterMax, waterLevel);
 
 	}
@@ -111,7 +113,7 @@ public class WaterClock : MonoBehaviour {
 //		if (gameRunning) {
 //			waterLevel -= amount;
 //			//display.setShakeTime(0.5f);
-//			
+//			f
 //			//resetTick();
 //			
 //			audio.PlayOneShot(moreTime);
@@ -190,14 +192,17 @@ public class WaterClock : MonoBehaviour {
 
 		if (getHullHealth() <= 70f && damageLeaks.Length > 1 && !damageLeaks[1].isPlaying) {
 			damageLeaks[1].Play();
+			audio.PlayOneShot(geiserSound);
 		}
 
 		if (getHullHealth() <= 50f && damageLeaks.Length > 2 && !damageLeaks[2].isPlaying) {
 			damageLeaks[2].Play();
+			audio.PlayOneShot(geiserSound);
 		}
 
 		if (getHullHealth() <= 20f && damageLeaks.Length > 3 && !damageLeaks[3].isPlaying) {
 			damageLeaks[3].Play();
+			audio.PlayOneShot(geiserSound);
 		}
 	}
 
