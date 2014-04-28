@@ -2,6 +2,7 @@
 using System.Collections;
 
 [RequireComponent (typeof(AudioSource))]
+[RequireComponent (typeof(FadeBehaviour))]
 public class WaterClock : MonoBehaviour {
 	private static CameraBehaviour screen = null;
 	private static float[] tickTimes = {5f, 4f, 3f, 2.5f, 2f, 1.5f, 1f, 0.75f, 0.5f, 0.25f, -100f};
@@ -33,8 +34,6 @@ public class WaterClock : MonoBehaviour {
 	
 	private int tickIndex;
 	
-	//FadeBehaviour fade;
-	
 	
 	// Use this for initialization
 	void Start () {
@@ -47,8 +46,6 @@ public class WaterClock : MonoBehaviour {
 		pumpBroke=false;
 		tickIndex = 0;
 		hullText.text = "hull: 100";
-//		fade = this.GetComponent<FadeBehaviour>();
-//		fade.FadeIn();
 	}
 	
 	// Update is called once per frame
@@ -127,6 +124,9 @@ public class WaterClock : MonoBehaviour {
 			yield return new WaitForSeconds(10f);
 		}
 
+		FadeBehaviour fade = this.GetComponent<FadeBehaviour>();
+		fade.FadeOut();
+		yield return new WaitForSeconds(fade.fadeTime);
 		Application.LoadLevel("TitleScene");
 	}
 
