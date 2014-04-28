@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class CameraBehaviour : MonoBehaviour {
 
@@ -27,6 +28,10 @@ public class CameraBehaviour : MonoBehaviour {
 	public Color endColor;
 	public float endDepth;
 
+	public Light sunlight;
+	public float deepLightRatio;
+	private float maxIntensity;
+
 	// Use this for initialization
 	void Start () {
 		RenderSettings.fog = true;
@@ -34,6 +39,8 @@ public class CameraBehaviour : MonoBehaviour {
 		RenderSettings.fogStartDistance = 80f;
 		RenderSettings.fogEndDistance = 300f;
 		RenderSettings.fogMode = FogMode.Linear;
+
+		maxIntensity = sunlight.intensity;
 	}
 	
 	// Update is called once per frame
@@ -48,11 +55,14 @@ public class CameraBehaviour : MonoBehaviour {
 
 		if (transform.position.y > startDepth) {
 			setBackgroundColor(startColor);
+			sunlight.intensity = maxIntensity;
 		} else if (transform.position.y < endDepth) {
 			setBackgroundColor(endColor);
+			sunlight.intensity = maxIntensity * deepLightRatio;
 		} else {
 			float frac = (transform.position.y - endDepth) / (startDepth - endDepth);
 			setBackgroundColor(Color.Lerp(endColor, startColor, frac));
+			sunlight.intensity = (maxIntensity - maxIntensity * deepLightRatio) * frac + maxIntensity * deepLightRatio;
 		}
 	}
 

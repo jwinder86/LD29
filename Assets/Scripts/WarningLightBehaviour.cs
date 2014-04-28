@@ -12,6 +12,8 @@ public class WarningLightBehaviour : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		isWarning = false;
+		originalIntensity = light.intensity;
+		originalColor = light.color;
 	}
 	
 	// Update is called once per frame
