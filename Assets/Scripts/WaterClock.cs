@@ -15,6 +15,7 @@ public class WaterClock : MonoBehaviour {
 	public TextMesh hullText;
 
 	public ParticleSystem[] damageLeaks;
+	public ParticleSystem hitParticles;
 	
 	private float waterLevel;
 
@@ -31,6 +32,7 @@ public class WaterClock : MonoBehaviour {
 
 	public AudioClip pumpSound;
 	public AudioClip geiserSound;
+	public AudioClip subHit;
 	
 	private int tickIndex;
 	
@@ -99,6 +101,8 @@ public class WaterClock : MonoBehaviour {
 			waterLevel = waterMax;
 			pig.Die();
 			sub.sinkSub();
+			hitParticles.Play();
+			audio.PlayOneShot(subHit);
 			StartCoroutine(ExitLevel(true));
 			
 			gameRunning = false;
@@ -135,6 +139,8 @@ public class WaterClock : MonoBehaviour {
 			screen = (CameraBehaviour) FindObjectOfType(typeof(CameraBehaviour));
 		}
 		screen.HeavyShakeTime(0.7f);
+		audio.PlayOneShot(subHit);
+		hitParticles.Play();
 
 		Debug.Log("Taking Damage!");
 		leakMultiplyer = leakMultiplyer + damageInc;
