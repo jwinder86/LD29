@@ -66,7 +66,7 @@ public class MovementStationBehaviour : MonoBehaviour, Station {
 		//rigidbody.isKinematic = false;
 		rigidbody.useGravity = true;
 		rigidbody.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationX;
-		rigidbody.AddTorque(new Vector3(0f, 0f, Random.Range(-1, 1)) * 100f, ForceMode.Acceleration);
+		rigidbody.AddTorque(new Vector3(0f, 0f, Random.Range(-1f, 1f)) * 10f, ForceMode.Acceleration);
 		subCamera.transform.parent = null;
 	}
 }
