@@ -30,4 +30,8 @@ public class ScoreHolder {
 	public static ExitState getExitState() {
 		return exitState;
 	}
+
+	public string getLootString() {
+		return "$ " + score.ToString("#,##0");
+	}
 }

@@ -98,6 +98,8 @@ public class WaterClock : MonoBehaviour {
 	
 	public void GameOver() {
 		if (gameRunning) {
+			LootCounterBehaviour loot = (LootCounterBehaviour) FindObjectOfType(typeof(LootCounterBehaviour));
+			ScoreHolder.exitLose(loot.getLootInt());
 			waterLevel = waterMax;
 			pig.Die();
 			sub.sinkSub();

@@ -26,4 +26,8 @@ public class LootCounterBehaviour : MonoBehaviour {
 	private string getLootString() {
 		return "$ " + score.ToString("#,##0");
 	}
+
+	public int getLootInt(){
+		return score;
+	}
 }
