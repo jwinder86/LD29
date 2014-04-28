@@ -18,6 +18,8 @@ public class TitleBehaviour : MonoBehaviour {
 	public Transform cam;
 	
 	public Transform[] markerList;
+	public Transform gameOverMarker;
+	private bool gameOverMode;
 	
 	private TextMesh selected;
 	
@@ -37,16 +39,23 @@ public class TitleBehaviour : MonoBehaviour {
 		buttons = new TextMesh[2];
 		buttons[0] = tutorialButton;
 		buttons[1] = playButton;
-		
-		Camera.main.transform.position = markerList[0].position;
-		Camera.main.transform.rotation = markerList[0].rotation;
+
+		if (ScoreHolder.getExitState() == ScoreHolder.ExitState.Lost) {
+			Camera.main.transform.position = gameOverMarker.position;
+			Camera.main.transform.rotation = gameOverMarker.rotation;
+			gameOverMode = true;
+		} else {
+			Camera.main.transform.position = markerList[0].position;
+			Camera.main.transform.rotation = markerList[0].rotation;
+			gameOverMode = false;
+		}
 		
 		storyMode = false;
 		storyIndex = 0;
 		
 		audio.PlayOneShot(musicSound, 0.5f);
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 		
@@ -60,7 +69,11 @@ public class TitleBehaviour : MonoBehaviour {
 					StartCoroutine(MoveToNextScene(markerList[storyIndex], markerList[storyIndex + 1]));
 				}
 			}
-			
+		} else if (gameOverMode) {
+			if (Input.GetButtonDown("Fire1") || Input.GetButtonDown("Fire2") || Input.GetButtonDown("Jump") || Input.GetKeyDown(KeyCode.Return)) {
+				gameOverMode = false;
+				StartCoroutine(MoveToNextScene(gameOverMarker, markerList[0]));
+			}
 			// menu
 		} else {
 			selected = buttons[buttonIndex];

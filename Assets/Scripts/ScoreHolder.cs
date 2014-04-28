@@ -4,7 +4,7 @@ using System.Collections;
 public class ScoreHolder {
 
 	private static int score;
-	private static ExitState exitState;
+	private static ExitState exitState = ExitState.Quit;
 
 	public enum ExitState {Won, Lost, Quit};
 
