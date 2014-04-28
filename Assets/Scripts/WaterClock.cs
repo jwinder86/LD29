@@ -88,12 +88,10 @@ public class WaterClock : MonoBehaviour {
 		}
 
 
-//		if(Input.GetKeyDown ("r")){
-//			StartCoroutine(ReloadLevel());
-//		}
-//		if(Input.GetKeyDown ("f")){
-//			takeDamage();
-//		}
+		if(Input.GetKeyDown(KeyCode.Escape)){
+			StopAllCoroutines();
+			StartCoroutine(ExitLevel(false));
+		}
 
 		display.setStatus(waterLevel / waterMax, waterLevel);
 	}
@@ -104,7 +102,7 @@ public class WaterClock : MonoBehaviour {
 			waterLevel = waterMax;
 			pig.Die();
 			sub.sinkSub();
-			StartCoroutine(ReloadLevel());
+			StartCoroutine(ExitLevel(true));
 			
 			gameRunning = false;
 		}
@@ -115,14 +113,6 @@ public class WaterClock : MonoBehaviour {
 	}
 	
 	
-	public void WinGame() {
-		if (gameRunning) {
-			gameRunning = false;
-			
-			//StartCoroutine(loadNextLevel());
-		}		
-	}
-
 	public void setPumpingWater(bool isPumping){
 		pumpingWater = isPumping;
 	}
@@ -131,25 +121,12 @@ public class WaterClock : MonoBehaviour {
 		return pumpingWater;
 	}
 	
-//	private IEnumerator loadNextLevel() {
-//		
-//		yield return new WaitForSeconds(3f);
-//		fade = this.GetComponent<FadeBehaviour>();
-//		fade.FadeOut();
-//		yield return new WaitForSeconds(2f);
-//		
-//		string nextLevel = levelList[0];
-//		for (int i = 0; i < levelList.Length - 1; i++) {
-//			if (levelList[i].Equals(Application.loadedLevelName)) {
-//				nextLevel = levelList[i+1];
-//			}
-//		}
-//		
-//		Application.LoadLevel(nextLevel);
-//	}
-	
-	private IEnumerator ReloadLevel() {
-		yield return new WaitForSeconds(7f);
+
+	private IEnumerator ExitLevel(bool wait) {
+		if (wait) {
+			yield return new WaitForSeconds(10f);
+		}
+
 		Application.LoadLevel("TitleScene");
 	}
 
