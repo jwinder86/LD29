@@ -150,7 +150,7 @@ public class WaterClock : MonoBehaviour {
 	
 	private IEnumerator ReloadLevel() {
 		yield return new WaitForSeconds(7f);
-		Application.LoadLevel(Application.loadedLevel);
+		Application.LoadLevel("TitleScene");
 	}
 
 	public void takeDamage(){

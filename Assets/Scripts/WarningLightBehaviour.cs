@@ -4,6 +4,8 @@ using System.Collections;
 [RequireComponent (typeof (Light))]
 public class WarningLightBehaviour : MonoBehaviour {
 
+	public bool playOnAwake = false;
+
 	private float originalIntensity;
 	private Color originalColor;
 
@@ -14,6 +16,10 @@ public class WarningLightBehaviour : MonoBehaviour {
 		isWarning = false;
 		originalIntensity = light.intensity;
 		originalColor = light.color;
+
+		if (playOnAwake) {
+			StartCoroutine(WarningCoroutine());
+		}
 	}
 	
 	// Update is called once per frame
