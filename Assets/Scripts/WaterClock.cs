@@ -11,6 +11,7 @@ public class WaterClock : MonoBehaviour {
 	public float damageInc = 0.2f;
 
 	public TimerBarBehaviour display;
+	public TextMesh hullText;
 
 	public ParticleSystem[] damageLeaks;
 	
@@ -49,6 +50,7 @@ public class WaterClock : MonoBehaviour {
 		sub = (MovementStationBehaviour) FindObjectOfType(typeof(MovementStationBehaviour));
 		pumpBroke=false;
 		tickIndex = 0;
+		hullText.text = "hull: 100";
 //		fade = this.GetComponent<FadeBehaviour>();
 //		fade.FadeIn();
 	}
@@ -186,23 +188,29 @@ public class WaterClock : MonoBehaviour {
 		Debug.Log("Taking Damage!");
 		leakMultiplyer = leakMultiplyer + damageInc;
 
-		if (getHullHealth() < 100f && damageLeaks.Length > 0 && !damageLeaks[0].isPlaying) {
+		float hullHealth = getHullHealth();
+		if (hullHealth < 100f && damageLeaks.Length > 0 && !damageLeaks[0].isPlaying) {
 			damageLeaks[0].Play();
 		}
 
-		if (getHullHealth() <= 70f && damageLeaks.Length > 1 && !damageLeaks[1].isPlaying) {
+		if (hullHealth <= 70f && damageLeaks.Length > 1 && !damageLeaks[1].isPlaying) {
 			damageLeaks[1].Play();
 		}
 
-		if (getHullHealth() <= 50f && damageLeaks.Length > 2 && !damageLeaks[2].isPlaying) {
+		if (hullHealth <= 50f && damageLeaks.Length > 2 && !damageLeaks[2].isPlaying) {
 			damageLeaks[2].Play();
 			audio.PlayOneShot(geiserSound);
 		}
 
-		if (getHullHealth() <= 20f && damageLeaks.Length > 3 && !damageLeaks[3].isPlaying) {
+		if (hullHealth <= 20f && damageLeaks.Length > 3 && !damageLeaks[3].isPlaying) {
 			damageLeaks[3].Play();
 			audio.PlayOneShot(geiserSound);
 		}
+
+		if (hullHealth <= 20) {
+			hullText.color = Color.red;
+		}
+		hullText.text = "hull: " + Mathf.RoundToInt(hullHealth / 10f) + "0";
 	}
 
 	public float getLeakMultiplyer(){

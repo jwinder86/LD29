@@ -121,7 +121,7 @@ public class PigBehaviour : MonoBehaviour {
 					}
 				}
 
-				Debug.Log("Pig Start: " + startVel + ",  End: " + rigidbody.velocity + ",  Sub: " + submarineBody.velocity);
+				//Debug.Log("Pig Start: " + startVel + ",  End: " + rigidbody.velocity + ",  Sub: " + submarineBody.velocity);
 
 			} else {
 				if (Input.GetButtonDown("Jump") && stationTimer <= 0f) {

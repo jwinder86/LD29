@@ -9,6 +9,8 @@ public class PumpWarningBehavior : MonoBehaviour {
 
 	public WaterClock waterClock;
 
+	public WarningLightBehaviour warningLight;
+
 	public float warning1Limit = 0.5f;
 	public float warning2Limit = 0.75f;
 
@@ -26,39 +28,17 @@ public class PumpWarningBehavior : MonoBehaviour {
 	
 		waterLevel = waterClock.getWaterLevel();
 
-//		if(!audio.isPlaying){
-//			playSound(warning1Sound);
-//		}
-
-//		if(!audio.isPlaying){
-//			Debug.Log(!audio.isPlaying);
-//			if (waterLevel/waterMax > warning1Limit && !audio.isPlaying){
-//				Debug.Log("playing warning 1");
-//				playSound(warning1Sound);
-//				warning1Active = true;
-//			}else{
-//				audio.Stop();
-//			}
-//		}
 		if(!audio.isPlaying){
 			if (waterLevel/waterMax > warning1Limit && waterLevel/waterMax  < warning2Limit){
-				//Debug.Log("playing warning 1");
-				//playSound(warning1Sound);
 				Common.playSound(this.audio, warning1Sound);
-				
+				warningLight.enableWarning(true);
 			}else if(waterLevel/waterMax > warning2Limit){
-				//playSound(warning2Sound);
 				Common.playSound(this.audio, warning2Sound);
+				warningLight.enableWarning(true);
 			}else{
 				audio.Stop();
+				warningLight.enableWarning(false);
 			}
 		}
-	}
-	private void playSound(AudioClip sound){
-		if (!audio.isPlaying) {
-			audio.clip = sound;
-			audio.Play();
-		}
-		
 	}
 }

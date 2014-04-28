@@ -5,15 +5,12 @@ public class LootCounterBehaviour : MonoBehaviour {
 
 	public TextMesh text;
 
-	public WaterClock waterClock;
-
 	private int score;
 	private int hullPercent;
 
 	// Use this for initialization
 	void Start () {
 		text.text = "$ 0";
-		waterClock = (WaterClock) FindObjectOfType(typeof(WaterClock));
 	}
 	
 	// Update is called once per frame
@@ -27,7 +24,6 @@ public class LootCounterBehaviour : MonoBehaviour {
 	}
 
 	private string getLootString() {
-		hullPercent = (int)waterClock.getHullHealth();
-		return "Hull: " + hullPercent + "%     $ " + score.ToString("#,##0");
+		return "$ " + score.ToString("#,##0");
 	}
 }
