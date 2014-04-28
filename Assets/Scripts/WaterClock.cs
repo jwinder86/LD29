@@ -192,7 +192,6 @@ public class WaterClock : MonoBehaviour {
 
 		if (getHullHealth() <= 70f && damageLeaks.Length > 1 && !damageLeaks[1].isPlaying) {
 			damageLeaks[1].Play();
-			audio.PlayOneShot(geiserSound);
 		}
 
 		if (getHullHealth() <= 50f && damageLeaks.Length > 2 && !damageLeaks[2].isPlaying) {
