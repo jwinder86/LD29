@@ -92,6 +92,10 @@ public class WaterClock : MonoBehaviour {
 			StartCoroutine(ExitLevel(false));
 		}
 
+		if(Input.GetKeyDown("f")){
+			takeDamage();
+		}
+
 		display.setStatus(waterLevel / waterMax, waterLevel);
 	}
 	
