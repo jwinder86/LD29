@@ -53,11 +53,6 @@ public class WaterClock : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-//		if(Input.GetKeyDown ("f")){
-//			Debug.Log("pumping water");
-//			pumpingWater = true;
-//		}
-
 		//Debug.Log("gamerunning: " + gameRunning + "| waterLevel: " + waterLevel + "waterMax" + waterMax);
 		if (gameRunning) {
 			// activated pump
@@ -93,9 +88,9 @@ public class WaterClock : MonoBehaviour {
 			StartCoroutine(ExitLevel(false));
 		}
 
-		if(Input.GetKeyDown("f")){
-			takeDamage();
-		}
+//		if(Input.GetKeyDown("f")){
+//			takeDamage();
+//		}
 
 		display.setStatus(waterLevel / waterMax, waterLevel);
 	}
