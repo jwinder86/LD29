@@ -20,6 +20,8 @@ public class TitleBehaviour : MonoBehaviour {
 	public Transform[] markerList;
 	public Transform gameOverMarker;
 	private bool gameOverMode;
+	public Transform winMarker;
+	private bool winMode;
 	
 	private TextMesh selected;
 	
@@ -44,6 +46,12 @@ public class TitleBehaviour : MonoBehaviour {
 			Camera.main.transform.position = gameOverMarker.position;
 			Camera.main.transform.rotation = gameOverMarker.rotation;
 			gameOverMode = true;
+			winMode = false;
+		} else if (ScoreHolder.getExitState() == ScoreHolder.ExitState.Won) {
+			Camera.main.transform.position = winMarker.position;
+			Camera.main.transform.rotation = winMarker.rotation;
+			gameOverMode = false;
+			winMode = true;
 		} else {
 			Camera.main.transform.position = markerList[0].position;
 			Camera.main.transform.rotation = markerList[0].rotation;
@@ -73,6 +81,11 @@ public class TitleBehaviour : MonoBehaviour {
 			if (Input.GetButtonDown("Fire1") || Input.GetButtonDown("Fire2") || Input.GetButtonDown("Jump") || Input.GetKeyDown(KeyCode.Return)) {
 				gameOverMode = false;
 				StartCoroutine(MoveToNextScene(gameOverMarker, markerList[0]));
+			}
+		} else if (winMode) {
+			if (Input.GetButtonDown("Fire1") || Input.GetButtonDown("Fire2") || Input.GetButtonDown("Jump") || Input.GetKeyDown(KeyCode.Return)) {
+				winMode = false;
+				StartCoroutine(MoveToNextScene(winMarker, markerList[0]));
 			}
 			// menu
 		} else {
