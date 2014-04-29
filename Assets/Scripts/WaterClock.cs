@@ -89,6 +89,7 @@ public class WaterClock : MonoBehaviour {
 
 		if(Input.GetKeyDown(KeyCode.Escape)){
 			StopAllCoroutines();
+			ScoreHolder.exitQuit();
 			StartCoroutine(ExitLevel(false));
 		}
 
