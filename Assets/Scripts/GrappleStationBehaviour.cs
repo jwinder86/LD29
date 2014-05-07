@@ -5,29 +5,24 @@ using System.Collections;
 [RequireComponent (typeof (Renderer))]
 [RequireComponent (typeof(AudioSource))]
 [RequireComponent (typeof (LineRenderer))]
-public class GrappleStationBehaviour : MonoBehaviour, Station {
+public class GrappleStationBehaviour : StationBehaviour {
 
 	public Transform submarine;
 
 	public LootCounterBehaviour lootCounter;
 
 	public CameraBehaviour subCamera;
+	public SpotlightBehaviour spotlight;
 
 	public ParticleSystem particles;
 
-	public Texture2D crosshairTex;
-	public Color crosshairColor;
-	public int texSize = 64;
-
 	public AudioClip fireSound;
-	public AudioClip activateStationSound;
 	public AudioClip lootSound;
 
 	public float moveSpeed;
 	public float moveTime;
 	public float startDistance;
 
-	private bool engaged;
 	private bool firing;
 	private float moveTimer;
 
@@ -37,7 +32,6 @@ public class GrappleStationBehaviour : MonoBehaviour, Station {
 
 	// Use this for initialization
 	void Start () {
-		engaged = false;
 		currentLoot = null;
 		firing = false;
 		renderer.enabled = false;
@@ -48,10 +42,12 @@ public class GrappleStationBehaviour : MonoBehaviour, Station {
 	// Update is called once per frame
 	void Update () {
 		if (engaged) {
+			Vector3 fireDirection = getRelativeMouse().normalized;
 			if (!firing && Input.GetButtonDown("Fire1")) {
-				Vector3 fireDirection = relativeMouse(Input.mousePosition).normalized;
 				StartCoroutine(FireCoroutine(fireDirection));
 			}
+
+			spotlight.RotateTo(Mathf.Atan2(fireDirection.y, fireDirection.x) * Mathf.Rad2Deg);
 		}
 	}
 
@@ -59,19 +55,6 @@ public class GrappleStationBehaviour : MonoBehaviour, Station {
 		if (firing) {
 			line.SetPosition(0, transform.position);
 			line.SetPosition(1, subPosition());
-		}
-	}
-
-	// draw the crosshairs
-	void OnGUI() {
-		if (engaged) {
-			Rect rect = new Rect(
-				Input.mousePosition.x - texSize / 2,
-				Screen.height - Input.mousePosition.y - texSize / 2,
-				texSize, texSize);
-
-			GUI.color = crosshairColor;
-			GUI.DrawTexture(rect, crosshairTex);
 		}
 	}
 
@@ -122,25 +105,13 @@ public class GrappleStationBehaviour : MonoBehaviour, Station {
 		}
 	}
 
-	public void useStation(bool engage, PigBehaviour other) {
-
+	public override void UseStation(bool engage, PigBehaviour player) {
+		base.UseStation(engage, player);
 		if (engage) {
-			Common.playSound(this.audio, activateStationSound);
-			engaged = true;
-			other.useStation(this);
 			subCamera.zoomCamera(true);
 		} else {
-			engaged = false;
-			other.useStation(null);
 			subCamera.zoomCamera(false);
-			audio.PlayOneShot(activateStationSound);
 		}
-	}
-
-	private Vector3 relativeMouse(Vector3 mousePos) {
-		float x = mousePos.x - (Screen.width / 2f);
-		float y = mousePos.y - (Screen.height / 2f);
-		return new Vector3(x, y, 0f);
 	}
 
 	private Vector3 subPosition() {

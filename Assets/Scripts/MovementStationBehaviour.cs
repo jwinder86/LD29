@@ -3,22 +3,20 @@ using System.Collections;
 
 [RequireComponent (typeof (Transform))]
 [RequireComponent (typeof(AudioSource))]
-public class MovementStationBehaviour : MonoBehaviour, Station {
+public class MovementStationBehaviour : StationBehaviour {
 
 	public CameraBehaviour subCamera;
+	public SpotlightBehaviour spotlight;
 
 	public float movementAccel = 3f;
 	public float maxSpeed = 5f;
 	public AudioClip movementSound;
-	public AudioClip activateStationSound;
 
 	public ParticleSystem particles;
 
-	private bool engaged;
-
 	// Use this for initialization
 	void Start () {
-		engaged = false;
+
 	}
 	
 	// Update is called once per frame
@@ -35,26 +33,22 @@ public class MovementStationBehaviour : MonoBehaviour, Station {
 			if (rigidbody.velocity.magnitude < maxSpeed) {
 				rigidbody.AddForce(moveVector * movementAccel, ForceMode.Acceleration);
 			}
+
+			Vector3 aimDirection = getRelativeMouse().normalized;
+			spotlight.RotateTo(Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg);
 		}	
 
 	}
 
-	public void useStation(bool engage, PigBehaviour other) {
+	public override void UseStation(bool engage, PigBehaviour player) {
+		base.UseStation(engage, player);
 
 		if (engage) {
-			Common.playSound(this.audio, activateStationSound);
-			//rigidbody.isKinematic = false;
-			engaged = true;
-			other.useStation(this);
 			subCamera.zoomCamera(true);
 			particles.Play();
 		} else {
-			//rigidbody.isKinematic = true;
-			engaged = false;
-			other.useStation(null);
 			subCamera.zoomCamera(false);
 			particles.Stop();
-			audio.PlayOneShot(activateStationSound);
 		}
 
 	}

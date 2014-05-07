@@ -1,47 +1,54 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[RequireComponent (typeof (Collider))]
+[RequireComponent (typeof(AudioSource))]
 public class StationBehaviour : MonoBehaviour {
 
-	public MovementStationBehaviour movementStation;
-	public GrappleStationBehaviour grappleStation;
-	public PumpStationBehavior pumpStation;
-	public RocketStationBehaviour rocketStation;
+	public AudioClip activateStationSound;
+	public Texture2D crosshairTex;
+	public Color crosshairColor = Color.cyan;
+	public int crosshairSize = 64;
 
-	private Station station;
+	protected bool engaged;
 
 	// Use this for initialization
 	void Start () {
-		station = null;
+		engaged = false;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (station == null) {
-			findStation();
+	
+	}
+
+	// draw the crosshairs
+	void OnGUI() {
+		if (engaged && crosshairTex != null) {
+			Rect rect = new Rect(
+				Input.mousePosition.x - crosshairSize / 2,
+				Screen.height - Input.mousePosition.y - crosshairSize / 2,
+				crosshairSize, crosshairSize);
+			
+			GUI.color = crosshairColor;
+			GUI.DrawTexture(rect, crosshairTex);
 		}
 	}
 
-	void OnTriggerStay(Collider other) {
-		PigBehaviour pig = other.GetComponent<PigBehaviour>();
-
-		if (pig != null && Input.GetButtonDown("Jump")) {
-			station.useStation(true, pig);
-		}
-	}
-
-	private void findStation() {
-		if (movementStation != null) {
-			station = movementStation;
-		} else if (grappleStation != null) {
-			station = grappleStation;
-		} else if (pumpStation != null) {
-			station = pumpStation;
-		} else if (rocketStation != null) {
-			station = rocketStation;
+	public virtual void UseStation(bool engage, PigBehaviour player) {
+		if (engage) {
+			engaged = true;
+			player.useStation(this);
 		} else {
-			Debug.LogError(this + ": No station to use!" + movementStation + grappleStation);
+			engaged = false;
+			player.useStation(null);
 		}
+
+		audio.PlayOneShot(activateStationSound);
+	}
+
+	protected Vector3 getRelativeMouse() {
+		float x = Input.mousePosition.x - (Screen.width / 2f);
+		float y = Input.mousePosition.y - (Screen.height / 2f);
+		return new Vector3(x, y, 0f);
 	}
 }

@@ -29,7 +29,12 @@ public class KelpForestBehaviour : MonoBehaviour {
 
 		for (int i = 0; i < kelpCount; i++) {
 			// randomly place
-			float xPos = Random.Range(-0.5f, 0.5f);
+			float xPos;
+			if (kelpCount > 3) {
+				xPos = ((i / (float)(kelpCount - 1)) - 0.5f) * 0.8f + Random.Range(-0.1f, 0.1f);
+			} else {
+				xPos = Random.Range(-0.5f, 0.5f);
+			}
 			float zPos = Random.Range(-0.5f, 0.5f);
 			Vector3 kelpPos = transform.TransformPoint(new Vector3(xPos, 0f, zPos));
 
@@ -54,6 +59,9 @@ public class KelpForestBehaviour : MonoBehaviour {
 			kelp.amplitudeTwo = amplitudeTwo;
 			kelp.frequencyTwo = frequencyTwo;
 			kelp.speed = speed;
+
+			// place kelp under forest
+			kelp.transform.parent = transform;
 		}
 	}
 	

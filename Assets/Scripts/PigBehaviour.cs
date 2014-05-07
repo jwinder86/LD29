@@ -31,7 +31,7 @@ public class PigBehaviour : MonoBehaviour {
 	
 	private Facing facingDirection;
 
-	private Station currentStation;
+	private StationBehaviour currentStation;
 	private float stationTimer;
 
 	private WaterClock waterClock;
@@ -125,7 +125,7 @@ public class PigBehaviour : MonoBehaviour {
 
 			} else {
 				if (Input.GetButtonDown("Jump") && stationTimer <= 0f) {
-					currentStation.useStation(false, this);
+					currentStation.UseStation(false, this);
 				}
 
 				if (stationTimer > 0f) {
@@ -178,12 +178,12 @@ public class PigBehaviour : MonoBehaviour {
 		}
 	}
 
-	public void useStation(Station station) {
+	public void useStation(StationBehaviour station) {
 		Debug.Log("Use Station: " + station);
 		if (station != null) {
 			rigidbody.isKinematic = true;
 			collider.enabled = false;
-			stationTimer = 0.2f; // wait 2 seconds
+			stationTimer = 0.2f; // wait 0.2 seconds
 		} else {
 			collider.enabled = true;
 		}

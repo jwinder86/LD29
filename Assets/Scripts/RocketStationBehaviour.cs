@@ -2,53 +2,36 @@
 using System.Collections;
 
 [RequireComponent (typeof (Rigidbody))]
-public class RocketStationBehaviour : MonoBehaviour, Station {
+public class RocketStationBehaviour : StationBehaviour {
 
 	public CameraBehaviour subCamera;
+	public SpotlightBehaviour spotlight;
 
 	public RocketBehaviour rocketPrefab;
 	public float fireDistance;
 	public float fireDelay;
 	public float fireSpeed;
-	public AudioClip activateStationSound;
 
-	public Texture2D crosshairTex;
-	public Color crosshairColor;
-	public int texSize = 64;
-
-	private bool engaged;
 	private float fireTimer;
 
 	// Use this for initialization
 	void Start () {
-		engaged = false;
 		fireTimer = 0f;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		if (engaged) {
+			Vector3 fireDirection = relativeMouse(Input.mousePosition).normalized;
 			if (fireTimer <= 0f && Input.GetButtonDown("Fire1")) {
-				Vector3 fireDirection = relativeMouse(Input.mousePosition).normalized;
 				FireRocket(fireDirection);
 			}
+
+			spotlight.RotateTo(Mathf.Atan2(fireDirection.y, fireDirection.x) * Mathf.Rad2Deg);
 		}
 
 		if (fireTimer > 0f) {
 			fireTimer -= Time.deltaTime;
-		}
-	}
-
-	// draw the crosshairs
-	void OnGUI() {
-		if (engaged) {
-			Rect rect = new Rect(
-				Input.mousePosition.x - texSize / 2,
-				Screen.height - Input.mousePosition.y - texSize / 2,
-				texSize, texSize);
-			
-			GUI.color = crosshairColor;
-			GUI.DrawTexture(rect, crosshairTex);
 		}
 	}
 
@@ -60,20 +43,12 @@ public class RocketStationBehaviour : MonoBehaviour, Station {
 		fireTimer = fireDelay;
 	}
 
-	public void useStation(bool engage, PigBehaviour other) {
-
+	public override void UseStation(bool engage, PigBehaviour player) {
+		base.UseStation(engage, player);
 		if (engage) {
-			Common.playSound(this.audio, activateStationSound);
-			//rigidbody.isKinematic = false;
-			engaged = true;
-			other.useStation(this);
 			subCamera.zoomCamera(true);
 		} else {
-			//rigidbody.isKinematic = true;
-			engaged = false;
-			other.useStation(null);
 			subCamera.zoomCamera(false);
-			audio.PlayOneShot(activateStationSound);
 		}
 	}
 

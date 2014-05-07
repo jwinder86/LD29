@@ -88,6 +88,7 @@ public class TentacleBehaviour : MonoBehaviour {
 		transform.parent.position = hiddenPosition;
 		yield return new WaitForSeconds(hideTime);
 
+		audio.PlayOneShot(hitSound);
 		for (float t = 0; t <= moveTime; t += Time.deltaTime) {
 			transform.parent.position = Vector3.Lerp(hiddenPosition, outPosition, t / moveTime);
 			yield return null;
