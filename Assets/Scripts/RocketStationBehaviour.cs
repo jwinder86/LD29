@@ -2,6 +2,7 @@
 using System.Collections;
 
 [RequireComponent (typeof (Rigidbody))]
+[RequireComponent (typeof (AudioSource))]
 public class RocketStationBehaviour : MovementStationBehaviour {
 
 	public SpotlightBehaviour spotlight;
@@ -10,6 +11,9 @@ public class RocketStationBehaviour : MovementStationBehaviour {
 	public float fireDistance;
 	public float fireDelay;
 	public float fireSpeed;
+
+	public ReloadStationBehaviour reload;
+	public AudioClip noRocket;
 
 	private float fireTimer;
 
@@ -25,7 +29,11 @@ public class RocketStationBehaviour : MovementStationBehaviour {
 		if (engaged) {
 			Vector3 fireDirection = getRelativeMouse().normalized;
 			if (fireTimer <= 0f && Input.GetButtonDown("Fire1")) {
-				FireRocket(fireDirection);
+				if (reload.UseRocket()) {
+					FireRocket(fireDirection);
+				} else {
+					audio.PlayOneShot(noRocket);
+				}
 			}
 
 			spotlight.RotateTo(Mathf.Atan2(fireDirection.y, fireDirection.x) * Mathf.Rad2Deg);
@@ -39,7 +47,7 @@ public class RocketStationBehaviour : MovementStationBehaviour {
 	private void FireRocket(Vector3 direction) {
 		float angle = Mathf.Rad2Deg * Mathf.Atan2(direction.y, direction.x);
 		RocketBehaviour rocket = (RocketBehaviour) Instantiate(rocketPrefab, transform.position + direction * fireDistance, Quaternion.Euler(new Vector3(0f, 0f, angle)));
-		rocket.rigidbody.velocity = rigidbody.velocity + direction * fireSpeed;
+		rocket.rigidbody.velocity = direction * fireSpeed;
 
 		fireTimer = fireDelay;
 	}

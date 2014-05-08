@@ -5,13 +5,10 @@ using System.Collections;
 public class TerminalBehaviour : MonoBehaviour {
 
 	public StationBehaviour station;
-	public RocketStationBehaviour rocketStation;
 
 	// Use this for initialization
 	void Start () {
-		if (station == null) {
-			station = (StationBehaviour) rocketStation;
-		}
+
 	}
 	
 	// Update is called once per frame
