@@ -2,9 +2,8 @@
 using System.Collections;
 
 [RequireComponent (typeof (Rigidbody))]
-public class RocketStationBehaviour : StationBehaviour {
+public class RocketStationBehaviour : MovementStationBehaviour {
 
-	public CameraBehaviour subCamera;
 	public SpotlightBehaviour spotlight;
 
 	public RocketBehaviour rocketPrefab;
@@ -21,8 +20,10 @@ public class RocketStationBehaviour : StationBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		directionalInput(new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")));
+
 		if (engaged) {
-			Vector3 fireDirection = relativeMouse(Input.mousePosition).normalized;
+			Vector3 fireDirection = getRelativeMouse().normalized;
 			if (fireTimer <= 0f && Input.GetButtonDown("Fire1")) {
 				FireRocket(fireDirection);
 			}
@@ -41,20 +42,5 @@ public class RocketStationBehaviour : StationBehaviour {
 		rocket.rigidbody.velocity = rigidbody.velocity + direction * fireSpeed;
 
 		fireTimer = fireDelay;
-	}
-
-	public override void UseStation(bool engage, PigBehaviour player) {
-		base.UseStation(engage, player);
-		if (engage) {
-			subCamera.zoomCamera(true);
-		} else {
-			subCamera.zoomCamera(false);
-		}
-	}
-
-	private Vector3 relativeMouse(Vector3 mousePos) {
-		float x = mousePos.x - (Screen.width / 2f);
-		float y = mousePos.y - (Screen.height / 2f);
-		return new Vector3(x, y, 0f);
 	}
 }

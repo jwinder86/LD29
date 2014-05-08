@@ -6,7 +6,6 @@ using System.Collections;
 public class MovementStationBehaviour : StationBehaviour {
 
 	public CameraBehaviour subCamera;
-	public SpotlightBehaviour spotlight;
 
 	public float movementAccel = 3f;
 	public float maxSpeed = 5f;
@@ -22,7 +21,6 @@ public class MovementStationBehaviour : StationBehaviour {
 	// Update is called once per frame
 	void Update () {
 		directionalInput(new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")));
-
 	}
 
 	public void directionalInput(Vector2 moveVector) {
@@ -33,9 +31,6 @@ public class MovementStationBehaviour : StationBehaviour {
 			if (rigidbody.velocity.magnitude < maxSpeed) {
 				rigidbody.AddForce(moveVector * movementAccel, ForceMode.Acceleration);
 			}
-
-			Vector3 aimDirection = getRelativeMouse().normalized;
-			spotlight.RotateTo(Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg);
 		}	
 
 	}
