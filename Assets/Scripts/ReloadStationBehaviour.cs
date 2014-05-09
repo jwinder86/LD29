@@ -7,6 +7,8 @@ public class ReloadStationBehaviour : StationBehaviour {
 	public int maxRockets;
 	public float reloadTime;
 	public TextMesh counter;
+
+	public ReloadAnimBehaviour reloadAnim;
 	public AudioClip addRocket;
 	public AudioClip lastRocket;
 
@@ -32,7 +34,7 @@ public class ReloadStationBehaviour : StationBehaviour {
 			}
 		}
 
-		counter.text = currentRockets.ToString();
+		counter.text = "Ammo: " + currentRockets.ToString();
 		if (currentRockets <= maxRockets / 4) {
 			counter.color = Color.red;
 		} else {
@@ -43,6 +45,7 @@ public class ReloadStationBehaviour : StationBehaviour {
 	private void loadOne() {
 		if (currentRockets < maxRockets) {
 			currentRockets++;
+			reloadAnim.AnimateReload();
 			if (currentRockets == maxRockets) {
 				audio.PlayOneShot(lastRocket);
 			} else {
