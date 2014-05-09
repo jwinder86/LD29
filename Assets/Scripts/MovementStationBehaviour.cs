@@ -7,8 +7,8 @@ public class MovementStationBehaviour : StationBehaviour {
 
 	public CameraBehaviour subCamera;
 
-	public float movementAccel = 3f;
-	public float maxSpeed = 5f;
+	public float movementAccel = 50f;
+	public float maxSpeed = 15f;
 	public AudioClip movementSound;
 
 	public ParticleSystem particles;
@@ -58,4 +58,6 @@ public class MovementStationBehaviour : StationBehaviour {
 		rigidbody.AddTorque(new Vector3(0f, 0f, Random.Range(-1f, 1f)) * 10f, ForceMode.Acceleration);
 		subCamera.transform.parent = null;
 	}
+
+
 }

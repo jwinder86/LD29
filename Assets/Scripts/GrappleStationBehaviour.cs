@@ -5,16 +5,16 @@ using System.Collections;
 [RequireComponent (typeof (Renderer))]
 [RequireComponent (typeof(AudioSource))]
 [RequireComponent (typeof (LineRenderer))]
-public class GrappleStationBehaviour : StationBehaviour {
+public class GrappleStationBehaviour : MovementStationBehaviour {
 
 	public Transform submarine;
 
 	public LootCounterBehaviour lootCounter;
 
-	public CameraBehaviour subCamera;
+	//public CameraBehaviour subCamera;
 	public SpotlightBehaviour spotlight;
 
-	public ParticleSystem particles;
+	public ParticleSystem grappleParticles;
 
 	public AudioClip fireSound;
 	public AudioClip lootSound;
@@ -41,6 +41,8 @@ public class GrappleStationBehaviour : StationBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		directionalInput(new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")));
+
 		if (engaged) {
 			Vector3 fireDirection = getRelativeMouse().normalized;
 			if (!firing && Input.GetButtonDown("Fire1")) {
@@ -69,7 +71,7 @@ public class GrappleStationBehaviour : StationBehaviour {
 		transform.parent = null;
 
 		audio.PlayOneShot(fireSound);
-		particles.Emit(20);
+		grappleParticles.Emit(20);
 
 		// move out
 		while (moveTimer < moveTime && currentLoot == null) {
@@ -105,14 +107,14 @@ public class GrappleStationBehaviour : StationBehaviour {
 		}
 	}
 
-	public override void UseStation(bool engage, PigBehaviour player) {
-		base.UseStation(engage, player);
-		if (engage) {
-			subCamera.zoomCamera(true);
-		} else {
-			subCamera.zoomCamera(false);
-		}
-	}
+//	public override void UseStation(bool engage, PigBehaviour player) {
+//		base.UseStation(engage, player);
+//		if (engage) {
+//			subCamera.zoomCamera(true);
+//		} else {
+//			subCamera.zoomCamera(false);
+//		}
+//	}
 
 	private Vector3 subPosition() {
 		return new Vector3(submarine.position.x, submarine.position.y, transform.position.z);
@@ -129,5 +131,28 @@ public class GrappleStationBehaviour : StationBehaviour {
 		if (firing && loot != null && currentLoot == null) {
 			attachLoot(loot);
 		}
+	}
+
+	public void directionalInput(Vector2 moveVector) {
+		if (engaged) {
+			if(!audio.isPlaying){
+				Common.playSound(this.audio, movementSound);
+			}			
+			if (submarine.rigidbody.velocity.magnitude < this.maxSpeed) {
+				submarine.rigidbody.AddForce(moveVector * this.movementAccel, ForceMode.Acceleration);
+			}
+		}	
+		
+	}
+
+	public void sinkSub(){
+		engaged = false;
+		subCamera.zoomCamera(true);
+		subCamera.HeavyShakeTime(1.5f);
+		//rigidbody.isKinematic = false;
+		submarine.rigidbody.useGravity = true;
+		submarine.rigidbody.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationX;
+		submarine.rigidbody.AddTorque(new Vector3(0f, 0f, Random.Range(-1f, 1f)) * 10f, ForceMode.Acceleration);
+		subCamera.transform.parent = null;
 	}
 }
