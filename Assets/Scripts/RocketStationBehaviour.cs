@@ -28,6 +28,8 @@ public class RocketStationBehaviour : MovementStationBehaviour {
 
 		if (engaged) {
 			Vector3 fireDirection = getRelativeMouse().normalized;
+			crosshairLabel = reload.GetRocketCount();
+
 			if (fireTimer <= 0f && Input.GetButtonDown("Fire1")) {
 				if (reload.UseRocket()) {
 					FireRocket(fireDirection);

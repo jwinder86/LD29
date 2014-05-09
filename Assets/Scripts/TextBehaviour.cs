@@ -49,11 +49,11 @@ public class TextBehaviour : MonoBehaviour {
 		              "the terminal by pressing [space].");
 
 		textTable.Add("fireInstructions1",
-		              "The Weapons Terminal can be used to fire torpedos.\n" +
-		              "Aim using the mouse and click [left-mouse] to\n" +
-		              "launch a torpedo.\n\n" +
-		              "Watch out for other submarines that want to steal\n" +
-		              "your treasure.");
+		              "The Steering Terminal can also be used to\n" +
+		              "fire torpedos.  Aim using the mouse and\n" +
+		              "click [left-mouse] to launch a torpedo.\n\n" +
+		              "Watch out for other submarines that want\n" +
+		              "to steal your treasure.");
 
 		textTable.Add("grappleInstructions1",
 		              "The Grappling Hook Terminal\n" +
@@ -62,7 +62,21 @@ public class TextBehaviour : MonoBehaviour {
 		              "the mouse and click [left-mouse]\n" +
 		              "to fire the grappling hook.\n\n" +
 		              "Collect lots of treasure to increase\n" +
-		              "your score!");
+		              "your score!\n\n" +
+		              "You can also navigate your submarine\n" +
+		              "while using this terminal, but it\n" +
+		              "will move slowly.");
+
+		textTable.Add("reloadInstructions1",
+		              "Your submarine can keep 8\n" +
+		              "torpedos armed and ready to\n" +
+		              "fire.  If you use all your\n" +
+		              "armed torpedos, you will be\n" +
+		              "unable to fire until they are\n" +
+		              "replaced.\n\n" +
+		              "The Reloading Station will\n" +
+		              "ready more torpedoes to be\n" +
+		              "fired.");
 
 		textTable.Add("pumpInstructions1",
 		              "As your submarine is damaged,\n" +
@@ -77,6 +91,7 @@ public class TextBehaviour : MonoBehaviour {
 
 		textTable.Add("goalInstructions1",
 		              "Can you find the treasures of these\n" +
-		              "depths and return with them alive?");
+		              "depths and return to your ship with\n" +
+		              "them alive?");
 	}
 }

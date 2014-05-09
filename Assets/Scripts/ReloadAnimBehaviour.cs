@@ -7,6 +7,8 @@ public class ReloadAnimBehaviour : MonoBehaviour {
 	public float yDist;
 	public float xDist;
 
+	public bool playOnAwake = false;
+
 	private Vector3 pos1, pos2, pos3;
 
 	// Use this for initialization
@@ -16,6 +18,10 @@ public class ReloadAnimBehaviour : MonoBehaviour {
 		pos3 = pos2 - new Vector3(xDist, 0f, 0f);
 
 		transform.localPosition = pos1;
+
+		if (playOnAwake) {
+			InvokeRepeating("AnimateReload", 0f, animTime * 2);
+		}
 	}
 	
 	// Update is called once per frame

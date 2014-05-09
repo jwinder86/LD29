@@ -23,6 +23,9 @@ public class KelpScript : MonoBehaviour {
 
 		startOne = Random.Range(0f, Mathf.PI * 2f);
 		startTwo = Random.Range(0f, Mathf.PI * 2f);
+
+		frequencyOne *= Random.Range(0.9f, 1.1f);
+		frequencyTwo *= Random.Range(0.9f, 1.1f);
 	}
 	
 	// Update is called once per frame

@@ -9,11 +9,12 @@ public class StationBehaviour : MonoBehaviour {
 	public Color crosshairColor = Color.cyan;
 	public int crosshairSize = 64;
 
-	protected bool engaged;
+	protected bool engaged = false;
+	protected int crosshairLabel = -1;
 
 	// Use this for initialization
 	void Start () {
-		engaged = false;
+
 	}
 	
 	// Update is called once per frame
@@ -31,6 +32,12 @@ public class StationBehaviour : MonoBehaviour {
 			
 			GUI.color = crosshairColor;
 			GUI.DrawTexture(rect, crosshairTex);
+
+			if (crosshairLabel >= 0) {
+				rect = new Rect(Input.mousePosition.x + crosshairSize / 3,
+				                Screen.height - Input.mousePosition.y + crosshairSize / 3, 100, 100);
+				GUI.Label(rect, crosshairLabel.ToString());
+			}
 		}
 	}
 

@@ -107,15 +107,6 @@ public class GrappleStationBehaviour : MovementStationBehaviour {
 		}
 	}
 
-//	public override void UseStation(bool engage, PigBehaviour player) {
-//		base.UseStation(engage, player);
-//		if (engage) {
-//			subCamera.zoomCamera(true);
-//		} else {
-//			subCamera.zoomCamera(false);
-//		}
-//	}
-
 	private Vector3 subPosition() {
 		return new Vector3(submarine.position.x, submarine.position.y, transform.position.z);
 	}
@@ -143,16 +134,5 @@ public class GrappleStationBehaviour : MovementStationBehaviour {
 			}
 		}	
 		
-	}
-
-	public void sinkSub(){
-		engaged = false;
-		subCamera.zoomCamera(true);
-		subCamera.HeavyShakeTime(1.5f);
-		//rigidbody.isKinematic = false;
-		submarine.rigidbody.useGravity = true;
-		submarine.rigidbody.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationX;
-		submarine.rigidbody.AddTorque(new Vector3(0f, 0f, Random.Range(-1f, 1f)) * 10f, ForceMode.Acceleration);
-		subCamera.transform.parent = null;
 	}
 }
