@@ -30,6 +30,8 @@ public class GrappleStationBehaviour : MovementStationBehaviour {
 
 	private LootBehaviour currentLoot;
 
+	private Vector3 subStartingPosition;
+
 	// Use this for initialization
 	void Start () {
 		currentLoot = null;
@@ -63,9 +65,12 @@ public class GrappleStationBehaviour : MovementStationBehaviour {
 	IEnumerator FireCoroutine(Vector3 direction) {
 		firing = true;
 		moveTimer = 0f;
+
+		subStartingPosition = subPosition();
+
 		float angle = Mathf.Rad2Deg * Mathf.Atan2(direction.y, direction.x) - 90f;
 		transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, angle));
-		transform.position = subPosition() + direction * startDistance;
+		transform.position = subStartingPosition + direction * startDistance;
 		renderer.enabled = true;
 		line.enabled = true;
 		transform.parent = null;
@@ -88,7 +93,7 @@ public class GrappleStationBehaviour : MovementStationBehaviour {
 			transform.position = Vector3.Lerp(farthestPosition, subPosition(), 1f - moveTimer / maxTimer);
 			moveTimer -= Time.deltaTime;
 
-			if ((transform.position - subPosition()).magnitude < startDistance) {
+			if ((transform.position - subStartingPosition).magnitude < startDistance) {
 				break;
 			}
 			
@@ -145,14 +150,14 @@ public class GrappleStationBehaviour : MovementStationBehaviour {
 		
 	}
 
-	public void sinkSub(){
-		engaged = false;
-		subCamera.zoomCamera(true);
-		subCamera.HeavyShakeTime(1.5f);
-		//rigidbody.isKinematic = false;
-		submarine.rigidbody.useGravity = true;
-		submarine.rigidbody.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationX;
-		submarine.rigidbody.AddTorque(new Vector3(0f, 0f, Random.Range(-1f, 1f)) * 10f, ForceMode.Acceleration);
-		subCamera.transform.parent = null;
-	}
+//	public void sinkSub(){
+//		engaged = false;
+//		subCamera.zoomCamera(true);
+//		subCamera.HeavyShakeTime(1.5f);
+//		//rigidbody.isKinematic = false;
+//		submarine.rigidbody.useGravity = true;
+//		submarine.rigidbody.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationX;
+//		submarine.rigidbody.AddTorque(new Vector3(0f, 0f, Random.Range(-1f, 1f)) * 10f, ForceMode.Acceleration);
+//		subCamera.transform.parent = null;
+//	}
 }
