@@ -21,7 +21,7 @@ public class WaterClock : MonoBehaviour {
 
 
 	private PigBehaviour pig;
-	private MovementStationBehaviour sub;
+	private RocketStationBehaviour sub;
 
 	private bool gameRunning;
 	private bool pumpingWater;
@@ -44,7 +44,7 @@ public class WaterClock : MonoBehaviour {
 		gameRunning = true;
 		pumpingWater = false;
 		pig = (PigBehaviour) FindObjectOfType(typeof(PigBehaviour));
-		sub = (MovementStationBehaviour) FindObjectOfType(typeof(MovementStationBehaviour));
+		sub = (RocketStationBehaviour) FindObjectOfType(typeof(RocketStationBehaviour));
 		pumpBroke=false;
 		tickIndex = 0;
 		hullText.text = "hull: 100";

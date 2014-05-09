@@ -35,7 +35,7 @@ public class BadSubBehaviour : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		playerLocation = (FindObjectOfType(typeof(MovementStationBehaviour)) as MovementStationBehaviour).GetComponent<Transform>();
+		playerLocation = (FindObjectOfType(typeof(RocketStationBehaviour)) as RocketStationBehaviour).GetComponent<Transform>();
 
 		renderers = GetComponentsInChildren<Renderer>();
 		startPos = transform.position;
